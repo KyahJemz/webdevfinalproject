@@ -39,10 +39,10 @@ function generateAuthToken($Username,$connection) {
     $stmt->bind_param("ss", $AuthToken, $Username);
 
     if ($stmt->execute()) {
+        $stmt->close();
         return $AuthToken; // Return the generated AuthToken
     } else {
+        $stmt->close();
         return false; // Return false if there's an error
     }
-
-    $stmt->close();
 }
