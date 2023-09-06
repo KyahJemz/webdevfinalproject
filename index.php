@@ -2,6 +2,16 @@
 
     session_start();
 
+    if (isset($_SESSION['Username']) && isset($_SESSION['AuthToken'])) {
+        require './php/database-config.php';
+        require './php/auth.php';
+
+        if (validateUserSession($_SESSION['Username'],$_SESSION['AuthToken'],$connection)){
+            header('Location: ./pages/home.php');
+            exit;
+        }
+    }
+
     if (isset($_POST['kainan-sign-in'])) {
         validateSignIn();
     } else if (isset($_POST['kainan-sign-up'])){
