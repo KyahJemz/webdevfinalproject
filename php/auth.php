@@ -40,9 +40,9 @@ function generateAuthToken($Username,$connection) {
 
     if ($stmt->execute()) {
         $stmt->close();
-        return $AuthToken; // Return the generated AuthToken
+        return $AuthToken;
     } else {
         $stmt->close();
-        return false; // Return false if there's an error
+        return false;
     }
 }
