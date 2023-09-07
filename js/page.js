@@ -48,12 +48,12 @@ function setSuggestedItems() {
         randomItems.forEach(item => {
             SuggestedItemsContainer.innerHTML += `
                 <div class="card-item" data-itemid="${item.ItemId}" data-itemname="${item.ItemName}" data-itemcategory="${item.ItemCategory}" data-itemprice="${item.ItemPrice}" data-itemimage="${item.ItemImage}">
-                    <div class="shopname">wonder shop</div>
-                    <div class="image"><img src="../images/uploads/items/${item.ItemImage}" alt=""></div>
-                    <div class="name">${item.ItemName}</div>
-                    <div class="category">${item.ItemCategory}</div>
-                    <div class="price">P${item.ItemPrice}</div>
-                    <div class="button"><button>Add to cart</button></div>
+                    <div class="StoreName">wonder shop</div>
+                    <div class="ItemImage"><img src="../images/uploads/items/${item.ItemImage}" alt=""></div>
+                    <div class="ItemName">${item.ItemName}</div>
+                    <div class="ItemCategory">${item.ItemCategory}</div>
+                    <div class="ItemPrice">P${item.ItemPrice}</div>
+                    <div class="Button"><button>Add to cart</button></div>
                 </div>
             `;
         });
@@ -67,9 +67,9 @@ function setSuggestedStores() {
         randomItems.forEach(item => {
             SuggestedStoresContainer.innerHTML += `
                 <div class="card-item" data-storeid="${item.StoreId}" data-storename="${item.StoreName}" data-storeimage="${item.StoreImage}" data-storeaccountid="${item.AccountId}">
-                    <div class="image"><img src="../images/uploads/stores/${item.StoreImage}" alt=""></div>
-                    <div class="name">${item.StoreName}</div>
-                    <div class="button"><button>View Shop</button></div>
+                    <div class="StoreImage"><img src="../images/uploads/stores/${item.StoreImage}" alt=""></div>
+                    <div class="StoreName">${item.StoreName}</div>
+                    <div class="Button"><button>View Shop</button></div>
                 </div>
             `;
         });

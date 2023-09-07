@@ -44,13 +44,12 @@
                 <div class="title">Suggested Items</div>
                 <div id="suggested-items-container" class="card-container">
                     <div class="card-item" data-itemid="" data-shopname="" data-itemname="" data-itemcategory="" data-itemprice="" data-favorite="" data-itemimage="" data-shopimage="" >
-                        <div class="shopname">wonder shop</div>
-                        <div class="favortie"></div>
-                        <div class="image"><img src="" alt=""></div>
-                        <div class="name">Food Name</div>
-                        <div class="category">Food</div>
-                        <div class="price">P1,320.00</div>
-                        <div class="button"><button>Add to cart</button></div>
+                        <div class="StoreName">wonder shop</div>
+                        <div class="ItemImage"><img src="" alt=""></div>
+                        <div class="ItemName">Food Name</div>
+                        <div class="ItemCategory">Food</div>
+                        <div class="ItemPrice">P1,320.00</div>
+                        <div class="Button"><button>Add to cart</button></div>
                     </div>
                 </div>
             </div>
@@ -58,11 +57,9 @@
                 <div class="title">Suggested Stores</div>
                 <div id="suggested-stores-container" class="card-container">
                     <div class="card-item" data-storeid="" data-storename="" data-storeimage="" data-storeaccountid="" data-storeaccauntname="">
-                        <div class="shopname">wonder shop</div>
-                        <div class="favortie"></div>
-                        <div class="image"><img src="" alt=""></div>
-                        <div class="name">Food Name</div>
-                        <div class="button"><button>View Shop</button></div>
+                        <div class="StoreImage"><img src="" alt=""></div>
+                        <div class="StoreName">Food Name</div>
+                        <div class="Button"><button>View Shop</button></div>
                     </div>
                 </div>
             </div>

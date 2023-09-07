@@ -68,26 +68,106 @@ body {
 }
 
 .suggested .suggested-row .card-item{
-
     aspect-ratio: 1.5/2;
     height: 200px;
     margin-right: 10px;  
     border-radius: 5px; 
     background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     box-shadow: 0px 0px 10px 0.1px rgb(209, 209, 209);
-    
+    position: relative;
+    padding: 5px;
 }
 
 .suggested .suggested-row .card-item:hover{
     transition: 0.5s;
     transform: scale(0.98);
-
-    
 }
+
+
+
+#suggested-items-container .card-item .StoreName{
+    width: 100%;
+    font-size: 0.7rem;
+    padding-bottom: 2.5px;
+    margin-bottom: 2.5px;
+    border-bottom: 1px solid gainsboro;
+}
+
+#suggested-items-container .card-item .ItemImage{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 0.7rem;
+    padding-bottom: 2.5px;
+    margin-bottom: 2.5px;
+    border: 1px solid gainsboro;
+    overflow: hidden;
+}
+
+#suggested-items-container .card-item .ItemName {
+    font-size: 0.9rem;
+    font-weight: 550;
+    text-align: center;
+}
+
+
+#suggested-items-container .card-item .ItemCategory {
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+#suggested-items-container .card-item .ItemPrice {
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+
+#suggested-items-container .card-item .Button {
+    text-align: center;
+    margin-top: 5px;
+    width: 100%;
+    border-top: 1px solid gainsboro;
+    padding: 5px;
+}
+
+
+
+
+
+#suggested-stores-container .card-item .StoreImage{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 0.7rem;
+    padding-bottom: 2.5px;
+    margin-bottom: 2.5px;
+    border: 1px solid gainsboro;
+    overflow: hidden;
+}
+
+#suggested-stores-container .card-item .StoreName {
+    font-size: 0.9rem;
+    font-weight: 550;
+    text-align: center;
+}
+
+
+#suggested-stores-container .card-item .Button {
+    margin-top: 20px;
+    text-align: center;
+    margin-top: 8px;
+    width: 100%;
+    border-top: 1px solid gainsboro;
+    padding: 10px;
+}
+
+
 
 .about {
     height: 100%;
