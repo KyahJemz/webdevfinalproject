@@ -1,14 +1,16 @@
 <?php 
-
     session_start();
 
-    if (isset($_SESSION['Username']) && isset($_SESSION['AuthToken'])) {
+    if (isset($_SESSION['AccountId']) && isset($_SESSION['AuthToken'])) {
         require './php/database-config.php';
         require './php/auth.php';
 
-        if (validateUserSession($_SESSION['Username'],$_SESSION['AuthToken'],$connection)){
-            header('Location: ./pages/home.php');
+        if (validateUserSession($_SESSION['AccountId'],$_SESSION['AuthToken'],$connection)){
+            header('Location: ./pages/page.php');
             exit;
+        } else {
+            $_SESSION['AccountId'] = null;
+            $_SESSION['AuthToken'] = null;
         }
     }
 
@@ -16,9 +18,7 @@
         validateSignIn();
     } else if (isset($_POST['kainan-sign-up'])){
         validateSignUp();
-    } else {
-
-    }
+    } 
 
     function validateSignIn (){
         require './php/database-config.php';
@@ -26,21 +26,34 @@
         $username = sanitize($_POST['kainan-username']);
         $password = sanitize($_POST['kainan-password']);
 
-        $sql = "SELECT * FROM tbl_accounts WHERE Username = '".$username."'";
+        $sql = "SELECT * FROM tbl_accounts WHERE Username = '".$username."'";        
         $result = $connection->query($sql);
+
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $storedPasswordHash = $row['Password'];
-
+            
             if (password_verify(trim($password), trim($storedPasswordHash))) {
                 $_SESSION['SIerror'] = "<p class='success'>Success, Welcome user!</p>";
 
                 $generatedToken = generateAuthToken($username,$connection);
                 $connection->close();
-
                 $_SESSION['Username'] = $username;
                 $_SESSION['AuthToken'] = $generatedToken;
-                header('Location: ./pages/home.php');
+                $_SESSION['AccountId'] = isset($row['AccountId']) ? $row['AccountId'] : "";
+                $_SESSION['Firstname'] = isset($row['Firstname']) ? $row['Firstname'] : "";
+                $_SESSION['Lastname'] = isset($row['Lastname']) ? $row['Lastname'] : "";
+                $_SESSION['Email'] = isset($row['Email']) ? $row['Email'] : "";
+                $_SESSION['PhoneNumber'] = isset($row['PhoneNumber']) ? $row['PhoneNumber'] : "";
+                $_SESSION['Address'] = isset($row['Address']) ? $row['Address'] : "";
+                $_SESSION['JoinedDate'] = isset($row['JoinedDate']) ? $row['JoinedDate'] : "";
+                $_SESSION['SuccessOrders'] = isset($row['SuccessOrders']) ? $row['SuccessOrders'] : "";
+                $_SESSION['StoreId'] = isset($row['StoreId']) ? $row['StoreId'] : "";
+                // $_SESSION['StoreName'] = isset($row['StoreName']) ? $row['StoreName'] : "";
+                // $_SESSION['StoreImage'] = isset($row['Image']) ? $row['Image'] : "";
+                $_SESSION['AccountPicture'] = isset($row['AccountPicture']) ? $row['AccountPicture'] : "";
+
+                header('Location: ./pages/page.php');
                 exit;
             } else {
                 $_SESSION['SIerror'] = "<p class='danger'>Failed, wrong password!</p>";
@@ -53,6 +66,8 @@
             return null;
         }
     }
+
+    echo ("<script>console.log('1')</script>");
     function validateSignUp (){
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             require './php/database-config.php';
@@ -135,7 +150,7 @@
             </div>
         </div>
         <div class="container-panel move-left">
-            <form class="sign-in-container" action="" method="post">
+            <form class="sign-in-container" action="" method="POST">
                 <h1>Sign in Form</h1>
                 <div id="sign-in-result" style="display: <?php if (!empty($_SESSION['SIerror'])) {echo 'block';} else {echo 'hidden';} ?>;">
                     <?php if (!empty($_SESSION['SIerror'])) {echo $_SESSION['SIerror'];} ?>
@@ -147,7 +162,7 @@
                 <input class="inputbutton" type="submit" name="kainan-sign-in" value="Submit">
             </form>
     
-            <form class="sign-up-container sign-up-container-hidden" action="" method="post">
+            <form class="sign-up-container sign-up-container-hidden" action="" method="POST">
                 <h1>Sign up Form</h1>
                 <div id="sign-up-result" style="display: <?php if (!empty($_SESSION['SUerror'])) {echo 'block';} else {echo 'hidden';} ?>;">
                     <?php if (!empty($_SESSION['SUerror'])) {echo $_SESSION['SUerror'];} ?>
@@ -167,7 +182,6 @@
             
         </div>
     </div>
-    <script src="./js/script.js"></script>
     <script src="./js/login.js"></script>
     <?php
         if (!empty($_SESSION['SUerror'])) {

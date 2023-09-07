@@ -1,0 +1,99 @@
+body {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.banner {
+    position: relative;
+    height: 100%;
+}
+
+.banner .banner-image {
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    transform: translateY(-50%);
+}
+
+.banner .banner-content {
+    position: absolute;
+    top: 40%;
+    left: 10%;
+}
+
+.banner .banner-content .banner-title {
+    font-size: 3rem;
+}
+
+.banner .banner-content .banner-subtitle {
+    font-size: 1.5rem;
+}
+
+.suggested {
+    height: 100%;
+    border-bottom: 1px solid red;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    padding: 25px;
+    padding-left: 100px;
+    padding-right: 100px;
+    overflow: hidden;
+    background-color: rgb(238, 238, 238);
+}
+
+.suggested .suggested-row .title{
+    font-size: 1.3rem;
+}
+
+.suggested .suggested-row{
+    overflow-x: hidden;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.suggested .suggested-row .card-container{
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    padding: 5px;
+    padding-bottom: 5px;
+}
+
+.suggested .suggested-row .card-item{
+
+    aspect-ratio: 1.5/2;
+    height: 200px;
+    margin-right: 10px;  
+    border-radius: 5px; 
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 10px 0.1px rgb(209, 209, 209);
+    
+}
+
+.suggested .suggested-row .card-item:hover{
+    transition: 0.5s;
+    transform: scale(0.98);
+
+    
+}
+
+.about {
+    height: 100%;
+    border-bottom: 1px solid red;
+}
+
+.footer {
+    height: 200px;
+}

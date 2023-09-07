@@ -36,3 +36,5 @@ function ChangePanel(panel) {
         ShowSignInFormButtonBox.style.visibility =  'hidden';
     }
 }
+
+console.log("item");
