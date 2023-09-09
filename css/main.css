@@ -65,9 +65,14 @@ body {
     overflow-x: scroll;
     padding: 5px;
     padding-bottom: 5px;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
 }
 
 .suggested .suggested-row .card-item{
+    scroll-snap-align: start; 
     aspect-ratio: 1.5/2;
     height: 200px;
     margin-right: 10px;  
@@ -80,7 +85,8 @@ body {
 
 .suggested .suggested-row .card-item:hover{
     transition: 0.5s;
-    transform: scale(0.98);
+    background-color: rgba(222, 184, 135, 0.267);
+    box-shadow: 0px 0px 10px 0.5px rgb(255, 255, 255);
 }
 
 
@@ -131,6 +137,8 @@ body {
     width: 100%;
     border-top: 1px solid gainsboro;
     padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 
@@ -167,7 +175,20 @@ body {
     padding: 10px;
 }
 
+.suggested .suggested-row .card-item .button button{
+    width: 100%;
+    cursor: pointer;
+    background-color: burlywood;
+    border: 1px solid rgb(250, 205, 147);
+    border-radius: 4px;
+    font-weight: 100;
+}
 
+
+.suggested .suggested-row .card-item .button button:hover{
+    transition: 0.5s;
+    transform: scale(1.03);
+}
 
 .about {
     height: 100%;

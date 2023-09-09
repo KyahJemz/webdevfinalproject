@@ -43,24 +43,13 @@
             <div class="suggested-row suggested-items">
                 <div class="title">Suggested Items</div>
                 <div id="suggested-items-container" class="card-container">
-                    <div class="card-item" data-itemid="" data-shopname="" data-itemname="" data-itemcategory="" data-itemprice="" data-favorite="" data-itemimage="" data-shopimage="" >
-                        <div class="StoreName">wonder shop</div>
-                        <div class="ItemImage"><img src="" alt=""></div>
-                        <div class="ItemName">Food Name</div>
-                        <div class="ItemCategory">Food</div>
-                        <div class="ItemPrice">P1,320.00</div>
-                        <div class="Button"><button>Add to cart</button></div>
-                    </div>
+
                 </div>
             </div>
             <div class="suggested-row suggested-stores">
                 <div class="title">Suggested Stores</div>
                 <div id="suggested-stores-container" class="card-container">
-                    <div class="card-item" data-storeid="" data-storename="" data-storeimage="" data-storeaccountid="" data-storeaccauntname="">
-                        <div class="StoreImage"><img src="" alt=""></div>
-                        <div class="StoreName">Food Name</div>
-                        <div class="Button"><button>View Shop</button></div>
-                    </div>
+                    
                 </div>
             </div>
         </div>

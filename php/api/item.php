@@ -69,10 +69,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'message' => 'Invalid file',
                 ];
             }
-        } else if ($_POST['Intent'] === "Upadte Item"){
-
+        } else if ($_POST['Intent'] === "Update Item"){
+            $AuthToken = $_POST['AuthToken'];
+            $AccountId = $_POST['AccountId'];
+            $StoreId = sanitize($_POST['StoreId']);
+            $ItemId = sanitize($_POST['ItemId']);
+            $ItemName = sanitize($_POST['ItemName']);
+            $ItemCategory = $_POST['ItemCategory'];
+            $ItemPrice = $_POST['ItemPrice'];
+            if (isset($_FILES['ItemImage'])) {
+                if ($_FILES['ItemImage']['size'] != 0) {
+                    $ItemImage = 'ITEM-'.$StoreId.'-'.$ItemName.'-'.uniqid().'.jpg';
+                    if (validateUserSession($AccountId,$AuthToken,$connection)){
+                        $uploadDir = '../../images/uploads/items/';
+                        $uploadedFile = $_FILES['ItemImage'];
+                        $originalFileName = $uploadedFile['name'];
+                        $tempFilePath = $uploadedFile['tmp_name'];
+                        $newFileName = $ItemImage;
+                        $targetFilePath = $uploadDir . $newFileName;
+                
+                        if (move_uploaded_file($tempFilePath, $targetFilePath)) {
+                            $response = [
+                                'success' => true,
+                                'message' => 'File uploaded successfully',
+                                'filePath' => $targetFilePath
+                            ];
+                            if(UpdateItemWithImage($ItemId, $ItemName, $ItemCategory, $ItemPrice, $ItemImage, $connection)){
+                                $response = [
+                                    'success' => true,
+                                    'message' => 'Item updated successfuly'
+                                ];
+                            } else {
+                                $response = [
+                                    'success' => false,
+                                    'message' => 'Failed to insert Item'
+                                ];
+                            }
+                        } else {
+                            $response = [
+                                'success' => false,
+                                'message' => 'Error uploading file'
+                            ];
+                        }
+                    } else {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Authentication failed',
+                            'id' => $AccountId,
+                            'token' => $AuthToken
+                        ];
+                    }
+                } else {
+                    if (validateUserSession($AccountId,$AuthToken,$connection)){
+                        $response = UpdateItemNoImage($ItemId, $ItemName, $ItemCategory, $ItemPrice, $connection);
+                    } else {
+                        $response = [
+                            'success' => false,
+                            'message' => 'Authentication failed',
+                            'id' => $AccountId,
+                            'token' => $AuthToken
+                        ];
+                    }
+                }
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => 'Invalid File',
+                ];
+            }
         } else if ($_POST['Intent'] === "Delete Item"){
-
+            $AuthToken = $_POST['AuthToken'];
+            $AccountId = sanitize($_POST['AccountId']);
+            $StoreId = sanitize($_POST['StoreId']);
+            $ItemId = sanitize($_POST['ItemId']);
+            if (validateUserSession($AccountId,$AuthToken,$connection)) {
+                $response = DeleteItem($ItemId, $connection);
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => 'Authentication failed',
+                    'id' => $AccountId,
+                    'token' => $AuthToken
+                ];
+            }
         } else if ($_POST['Intent'] === "Select Items"){
             $AuthToken = $_POST['AuthToken'];
             $AccountId = sanitize($_POST['AccountId']);

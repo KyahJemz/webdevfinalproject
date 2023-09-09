@@ -30,29 +30,16 @@
         $result = $connection->query($sql);
 
         if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $storedPasswordHash = $row['Password'];
+            $rows = $result->fetch_assoc();
+            $storedPasswordHash = $rows['Password'];
             
             if (password_verify(trim($password), trim($storedPasswordHash))) {
                 $_SESSION['SIerror'] = "<p class='success'>Success, Welcome user!</p>";
+                
+                generateAuthToken($username,$connection);
+                Login(is_null($rows['StoreId']),$rows['AccountId'],$connection);
 
-                $generatedToken = generateAuthToken($username,$connection);
                 $connection->close();
-                $_SESSION['Username'] = $username;
-                $_SESSION['AuthToken'] = $generatedToken;
-                $_SESSION['AccountId'] = isset($row['AccountId']) ? $row['AccountId'] : "";
-                $_SESSION['Firstname'] = isset($row['Firstname']) ? $row['Firstname'] : "";
-                $_SESSION['Lastname'] = isset($row['Lastname']) ? $row['Lastname'] : "";
-                $_SESSION['Email'] = isset($row['Email']) ? $row['Email'] : "";
-                $_SESSION['PhoneNumber'] = isset($row['PhoneNumber']) ? $row['PhoneNumber'] : "";
-                $_SESSION['Address'] = isset($row['Address']) ? $row['Address'] : "";
-                $_SESSION['JoinedDate'] = isset($row['JoinedDate']) ? $row['JoinedDate'] : "";
-                $_SESSION['SuccessOrders'] = isset($row['SuccessOrders']) ? $row['SuccessOrders'] : "";
-                $_SESSION['StoreId'] = isset($row['StoreId']) ? $row['StoreId'] : "";
-                // $_SESSION['StoreName'] = isset($row['StoreName']) ? $row['StoreName'] : "";
-                // $_SESSION['StoreImage'] = isset($row['Image']) ? $row['Image'] : "";
-                $_SESSION['AccountPicture'] = isset($row['AccountPicture']) ? $row['AccountPicture'] : "";
-
                 header('Location: ./pages/page.php');
                 exit;
             } else {

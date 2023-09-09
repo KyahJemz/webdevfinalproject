@@ -23,7 +23,7 @@ function CreateNewStore($AccountId, $StoreName, $StoreImage, $connection) {
     }
 }
 
-function UpdateStore ($StoreImage,$StoreName,$StoreId,$connection){
+function UpdateStoreWithImage ($StoreId, $StoreName, $StoreImage, $connection){
     $StoreId = sanitizeQuery($StoreId, $connection);
     $StoreName = sanitizeQuery($StoreName, $connection);
     $StoreImage = sanitizeQuery($StoreImage, $connection);
@@ -40,7 +40,23 @@ function UpdateStore ($StoreImage,$StoreName,$StoreId,$connection){
     }
 }
 
-function RemoveStore($StoreId,$AccountId,$connection){
+function UpdateStore ($StoreId, $StoreName, $connection){
+    $StoreId = sanitizeQuery($StoreId, $connection);
+    $StoreName = sanitizeQuery($StoreName, $connection);
+
+    if ($StoreId === FALSE || $StoreName === FALSE) {
+        return FALSE;
+    } else {
+        $sql = "UPDATE tbl_stores SET StoreName = '".$StoreName."' WHERE StoreId = '".$StoreId."'";
+        if ($connection->query($sql) === TRUE) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+}
+
+function DeleteStore($StoreId,$AccountId,$connection){
     $AccountId = sanitizeQuery($AccountId, $connection);
     $StoreId = sanitizeQuery($StoreId, $connection);
     if ($StoreId === FALSE) {

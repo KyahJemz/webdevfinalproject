@@ -117,16 +117,25 @@ body {
     border: 1px solid black;
 }
 
-.myprofile .title,
+.myprofile .myprofile-header,
 .transactions .title,
 .mystore .mystore-header {
     border-bottom: 1px solid gainsboro;
     padding-bottom: 10px;
 }
 
+.myprofile .myprofile-header,
 .mystore .mystore-header{
     display: flex;
     justify-content: space-between;
+}
+
+.myprofile .edit-profile-form-button {
+    width: 20px;
+    height: 20px;
+    background-image: url(../images/icons/edit.png);
+    background-color: rgba(0, 38, 255, 0.363);
+    background-size: 75%;
 }
 
 .mystore .add-item-form-button {
@@ -247,4 +256,28 @@ body {
     width: 100%;
     padding-top: 2px;
     padding-bottom: 2px;
+ }
+
+
+ .myprofile form input {
+    width: 100%;
+    margin-bottom: 4px;
+ }
+
+ .myprofile form input[type='checkbox']{
+    width: fit-content;
+ }
+
+ .myprofile form input[type='submit']{
+    margin-top: 10px;
+ }
+
+ .myprofile form label {
+    width: 100%;
+    
+ }
+
+ .myprofile form  {
+    margin-bottom: 30px
+    
  }

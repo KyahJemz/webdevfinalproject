@@ -1,5 +1,54 @@
 <?php 
-    
+
+
+function Login($NoStore,$AccountId,$connection){
+    if ($NoStore) {
+        $sql = "SELECT * FROM tbl_accounts WHERE AccountId = '".$AccountId."'";
+        $result = $connection->query($sql);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+
+            $_SESSION['Username'] = isset($row['Username']) ? $row['Username'] : "";
+            $_SESSION['AuthToken'] = isset($row['AuthToken']) ? $row['AuthToken'] : "";
+            $_SESSION['AccountId'] = isset($row['AccountId']) ? $row['AccountId'] : "";
+            $_SESSION['Firstname'] = isset($row['Firstname']) ? $row['Firstname'] : "";
+            $_SESSION['Lastname'] = isset($row['Lastname']) ? $row['Lastname'] : "";
+            $_SESSION['Email'] = isset($row['Email']) ? $row['Email'] : "";
+            $_SESSION['PhoneNumber'] = isset($row['PhoneNumber']) ? $row['PhoneNumber'] : "";
+            $_SESSION['Address'] = isset($row['Address']) ? $row['Address'] : "";
+            $_SESSION['JoinedDate'] = isset($row['JoinedDate']) ? $row['JoinedDate'] : "";
+            $_SESSION['SuccessOrders'] = isset($row['SuccessOrders']) ? $row['SuccessOrders'] : "";
+            $_SESSION['StoreId'] = isset($row['StoreId']) ? $row['StoreId'] : "";
+            $_SESSION['AccountPicture'] = isset($row['AccountPicture']) ? $row['AccountPicture'] : "";
+        }
+    } else {
+        $sql = "SELECT * FROM tbl_accounts AS a LEFT JOIN tbl_stores as s ON a.AccountId = s.AccountId WHERE a.AccountId = '".$AccountId."'";
+        $result = $connection->query($sql);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+
+            $_SESSION['Username'] = isset($row['Username']) ? $row['Username'] : "";
+            $_SESSION['AuthToken'] = isset($row['AuthToken']) ? $row['AuthToken'] : "";
+            $_SESSION['AccountId'] = isset($row['AccountId']) ? $row['AccountId'] : "";
+            $_SESSION['Firstname'] = isset($row['Firstname']) ? $row['Firstname'] : "";
+            $_SESSION['Lastname'] = isset($row['Lastname']) ? $row['Lastname'] : "";
+            $_SESSION['Email'] = isset($row['Email']) ? $row['Email'] : "";
+            $_SESSION['PhoneNumber'] = isset($row['PhoneNumber']) ? $row['PhoneNumber'] : "";
+            $_SESSION['Address'] = isset($row['Address']) ? $row['Address'] : "";
+            $_SESSION['JoinedDate'] = isset($row['JoinedDate']) ? $row['JoinedDate'] : "";
+            $_SESSION['SuccessOrders'] = isset($row['SuccessOrders']) ? $row['SuccessOrders'] : "";
+            $_SESSION['StoreId'] = isset($row['StoreId']) ? $row['StoreId'] : "";
+            $_SESSION['AccountPicture'] = isset($row['AccountPicture']) ? $row['AccountPicture'] : "";
+            $_SESSION['StoreName'] = isset($row['StoreName']) ? $row['StoreName'] : "";
+            $_SESSION['StoreImage'] = isset($row['StoreImage']) ? $row['Image'] : "";
+            $_SESSION['StoreOrders'] = isset($row['StoreOrders']) ? $row['StoreOrders'] : "";
+        }
+    }
+}
+
+
 function sanitize ($text){
     if (empty($text)) {
         return null;
