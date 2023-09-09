@@ -2,27 +2,87 @@ import { Helper } from './modules/helper.js';
 import { Ajax } from './modules/ajax.js';
 import { 
     Item, 
-    Store, 
-    CartItem ,
-    getMyItemsArray,
-    getItemsArray,
-    getStoresArray,
-    getMyCartArray,
-    getAccountDetailsArray,
-    getTransactionsArray,
-    refreshAllItems, refreshMyItems, refreshAllStores, refreshAccountDetails, refreshTransactions
+    Cart,
+    fetchAllItems,
+    AddItemToCart,
+    GetItemsFromCart,
+    ModifyItemQuantityFromCart,
+    fetchMyItems,
+    fetchAccountWithStore,
+    fetchAccount,
+    fetchTransactions
 } from './class.js';
+
+refreshMyTransactions();
+refreshMyItems();
+refreshMyAccount();
+
+function refreshMyItems(){
+    (async () => {
+        try {
+            const fetch = await fetchMyItems(AccountId, AuthToken, StoreId);
+            if (Array.isArray(fetch)) {
+                localStorage.setItem('MyItems', JSON.stringify(fetch));
+                ProfileMystoreRefreshList(fetch);
+                // console.log(JSON.parse(localStorage.getItem('Account')));
+            } else {
+                console.log('fetchItems is not an array.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    })();
+}
+
+function refreshMyAccount(){
+    (async () => {
+        try {
+            let fetch = null;
+            if (StoreId === null || StoreId === ""){
+                fetch = await fetchAccount(AccountId, AuthToken);
+            } else {
+                fetch = await fetchAccountWithStore(AccountId, AuthToken);
+            }
+            
+            if (Array.isArray(fetch)) {
+                localStorage.setItem('Account', JSON.stringify(fetch));
+                ProfileMyprofileEditProfileForm(fetch);
+                // console.log(JSON.parse(localStorage.getItem('Account')));
+            } else {
+                console.log('fetchItems is not an array.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    })();
+}
+
+function refreshMyTransactions(){
+    (async () => {
+        try {
+            const fetch = await fetchTransactions(AccountId, AuthToken);
+            if (Array.isArray(fetch)) {
+                localStorage.setItem('MyTransactions', JSON.stringify(fetch));
+                // console.log(JSON.parse(localStorage.getItem('Account')));
+                MyTransactions(fetch);
+            } else {
+                console.log('fetchItems is not an array.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    })();
+    
+}
+
+
+var Items = [];
+var Carts = [];
+var Category = [];
 
 const helper = new Helper();
 
-refreshMyItems();
-refreshTransactions();
 
-if (StoreId == "" || StoreId == null) {
-    refreshAccountDetails('Select Account',AccountId, AuthToken, StoreId);
-} else {
-    refreshAccountDetails('Select Account With Store',AccountId, AuthToken, StoreId);
-}
 
 var ProfileMystoreContainer = null;
 
@@ -33,7 +93,7 @@ var ProfileMyprofileContainer = document.getElementById('ProfileMyprofileContain
 // #############################################################################
 // REFRESH LIST OF ITEMS
 // #############################################################################
-function ProfileMystoreRefreshList(){
+function ProfileMystoreRefreshList(list){
 
     ProfileMystoreContainer.innerHTML = ``;
 
@@ -52,51 +112,38 @@ function ProfileMystoreRefreshList(){
         </div>
     `;
 
-    setTimeout(() => {
-        var formData = new FormData();
-        formData.append('AuthToken', AuthToken);
-        formData.append('AccountId', AccountId);
-        formData.append('StoreId', StoreId);
-        formData.append('Intent', 'Select MyItems');
-        Ajax.postFormData('../php/api/item.php', formData)
-        .then(responseJSON => {
-            responseJSON.forEach(item => {
-                ProfileMystoreContainer.innerHTML += `
-                    <div class="list-item" data-id="${item.ItemId}" data-name="${item.ItemName}" data-category="${item.ItemCategory}" data-price="${item.ItemPrice}" data-image="${item.ItemImage}">
-                        <div class="top">
-                            <div class="item-image">
-                                <img src="../images/uploads/items/${item.ItemImage}" alt="">
-                            </div>
-                            <div class="contents">
-                                <p class="item-name">${item.ItemName}</p>
-                                <p class="item-category">${item.ItemCategory}</p>
-                                <p class="item-price">${item.ItemPrice}</p>
-                            </div>
-                            <div class="actions">
-                                <div class="icons edit-button" title="Edit"></div>
-                                <div class="icons delete-button" title="Delete"></div>
-                            </div>
-                        </div>
-                        <div class="bottom" style="height: 0">
-                            <form data-id="${item.ItemId}" action="" method="" action="../php/api/item.php" method="post" enctype="multipart/form-data">
-                                <h3>Edit Item Form</h3>
-                                <fieldset><legend>Item Image:</legend><input name="ItemImage" class="new-image" type="file"></fieldset>
-                                <fieldset><legend>Item Name:</legend><input name="ItemName" value="${item.ItemName}" class="new-name" type="text"></fieldset>
-                                <fieldset><legend>Item Category:</legend><input name="ItemCategory" value="${item.ItemCategory}" class="new-category" type="text"></fieldset>
-                                <fieldset><legend>Item Price:</legend><input name="ItemPrice" value="${item.ItemPrice}" class="new-price" type="text"></fieldset>
-                                <input class="update-button" type="submit" value="Update changes">
-                            </form>
-                        </div>
+    list.forEach(item => {
+        ProfileMystoreContainer.innerHTML += `
+            <div class="list-item" data-id="${item.ItemId}" data-name="${item.ItemName}" data-category="${item.ItemCategory}" data-price="${item.ItemPrice}" data-image="${item.ItemImage}">
+                <div class="top">
+                    <div class="item-image">
+                        <img src="../images/uploads/items/${item.ItemImage}" alt="">
                     </div>
-                `;
+                    <div class="contents">
+                        <p class="item-name">${item.ItemName}</p>
+                        <p class="item-category">${item.ItemCategory}</p>
+                        <p class="item-price">${item.ItemPrice}</p>
+                    </div>
+                    <div class="actions">
+                        <div class="icons edit-button" title="Edit"></div>
+                        <div class="icons delete-button" title="Delete"></div>
+                    </div>
+                </div>
+                <div class="bottom" style="height: 0">
+                    <form data-id="${item.ItemId}" action="" method="" action="../php/api/item.php" method="post" enctype="multipart/form-data">
+                        <h3>Edit Item Form</h3>
+                        <fieldset><legend>Item Image:</legend><input name="ItemImage" class="new-image" type="file"></fieldset>
+                        <fieldset><legend>Item Name:</legend><input name="ItemName" value="${item.ItemName}" class="new-name" type="text"></fieldset>
+                        <fieldset><legend>Item Category:</legend><input name="ItemCategory" value="${item.ItemCategory}" class="new-category" type="text"></fieldset>
+                        <fieldset><legend>Item Price:</legend><input name="ItemPrice" value="${item.ItemPrice}" class="new-price" type="text"></fieldset>
+                        <input class="update-button" type="submit" value="Update changes">
+                    </form>
+                </div>
+            </div>
+        `;
 
-            });
-            bindProfileMyshopContainerButtons ();
-        })
-        .catch(error => {
-            console.error('Error:', error); // Log the error message and object
-        });
-    }, 1000);
+    });
+    bindProfileMyshopContainerButtons ();
 }
 
 
@@ -136,11 +183,12 @@ function ProfileMystoreAddShop(event){
     formData.append('Intent', 'Insert Store');
 
     Ajax.postFormData('../php/api/store.php',formData)
-    .then(response => response.json())
     .then(data => {
         console.log(data);
+        refreshMyAccount();
+        refreshMyItems();
+        MyShop();
     })
-    .then(refreshAccountDetails('Select Account With Store',AccountId, AuthToken, StoreId))
     .then(MyShop ())
     .catch(error => {
         console.error(error);
@@ -159,10 +207,10 @@ function ProfileMystoreAddItem(event){
     formData.append('Intent', "Insert Item");
 
     Ajax.postFormData('../php/api/item.php',formData)
-    .then(response => response.json())
     .then(data => {
         console.log(data);
-    }).then(ProfileMystoreRefreshList())
+        refreshMyItems()
+    })
     .catch(error => {
         console.error(error);
     });
@@ -184,10 +232,10 @@ function ProfileMyshopDeleteItem(event){
     formData.append('Intent', "Delete Item");
 
     Ajax.postFormData('../php/api/item.php',formData)
-    .then(response => response.json())
     .then(data => {
         console.log(data);
-    }).then(ProfileMystoreRefreshList())
+        refreshMyItems();
+    })
     .catch(error => {
         console.error(error);
     });
@@ -197,10 +245,8 @@ function ProfileMyshopDeleteItem(event){
 // #############################################################################
 // DEqwe
 // #############################################################################
-function ProfileMyprofileEditProfileForm() {
-    const data = getAccountDetailsArray();
-    console.log(data);
-    console.log(data[0]['AccountId']);
+function ProfileMyprofileEditProfileForm(list) {
+    const data = JSON.parse(localStorage.getItem('Account'));
     const EditFrom = `
         <form action="../php/api/Account.php" method="post" enctype="multipart/form-data">
             <h3>Account Edit Form</h3>
@@ -283,12 +329,10 @@ function ProfileMyprofileUpdateAccount(event){
     formData.append('Intent', "Update Account");
 
     Ajax.postFormData('../php/api/account.php',formData)
-    .then(response => response.json())
     .then(data => {
         console.log(data);
+        refreshMyAccount();
     })
-    .then(refreshAccountDetails('Select Account With Store',AccountId, AuthToken, StoreId))
-    .then(setTimeout(ProfileMyprofileEditProfileForm, 1000))
     .catch(error => {
         console.error(error);
     });
@@ -303,12 +347,10 @@ function ProfileMyprofileUpdateStore(event){
     formData.append('Intent', "Update Store");
 
     Ajax.postFormData('../php/api/store.php',formData)
-    .then(response => response.json())
     .then(data => {
         console.log(data);
+        refreshMyAccount();
     })
-    .then(refreshAccountDetails('Select Account With Store',AccountId, AuthToken, StoreId))
-    .then(setTimeout(ProfileMyprofileEditProfileForm, 1000))
     .catch(error => {
         console.error(error);
     });
@@ -347,10 +389,10 @@ function ProfileMyshopUpdateItem(event){
     formData.append('Intent', "Update Item");
 
     Ajax.postFormData('../php/api/item.php',formData)
-    .then(response => response.json())
     .then(data => {
         console.log(data);
-    }).then(ProfileMystoreRefreshList())
+        refreshMyItems()
+    })
     .catch(error => {
         console.error(error);
     });
@@ -417,19 +459,17 @@ function MyShop (){
         `<div id="ProfileMyshopAddItemFormButton" class="icons add-item-form-button" title="Add item"></div>`;
         ProfileMystoreContainer = document.getElementById('ProfileMystoreContainer');
         helper.ElementsAddClickListener(document.getElementById('ProfileMyshopAddItemFormButton'),ProfileMystoreAddItemForm);
-        ProfileMystoreRefreshList();
+        refreshMyItems();
     }
 }
 
-MyShop ();
-ProfileMyprofileEditProfileForm();
+MyShop();
 helper.ElementsAddClickListener(ProfileMyprofileEditProfileButton,ProfileMyprofileEditProfileForm);
 
-
-function MyTransactions(){
-    const data = getTransactionsArray();
-    console.log(date);
-    const empty = `
+function MyTransactions(list){
+    const data = list;
+    console.log(data);
+    const x = `
         <div class="list-item">
             <span class="left">
                 <div class="user">No Transactions</div>
@@ -439,24 +479,22 @@ function MyTransactions(){
             <span class="cost"></span>
         </div>
     `;
-    if (!empty(data)){
+    if (typeof data !== 'undefined' && data !== null && data !== '') {
         document.getElementById('ProfileTransactionsContainer').innerHTML = ``;
         data.forEach(element => {
             document.getElementById('ProfileTransactionsContainer').innerHTML = document.getElementById('ProfileTransactionsContainer').innerHTML + `
                 <div class="list-item">
                     <span class="left">
-                        <div class="user">No Transactions</div>
-                        <div class="type"></div>
-                        <div class="date"></div>
+                        <div class="user">${element.TransactionSeller}</div>
+                        <div class="type">${element.TransactionStatus}</div>
+                        <div class="date">${element.TransactionTimestamp}</div>
                     </span>
-                    <span class="cost"></span>
+                    <span class="cost">${element.TransactionAmount}</span>
                 </div>
             `;
         });    
     } else {
-        document.getElementById('ProfileTransactionsContainer').innerHTML = empty;
+        document.getElementById('ProfileTransactionsContainer').innerHTML = x;
     }
-    
 }
 
-MyTransactions();

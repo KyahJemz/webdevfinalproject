@@ -54,7 +54,7 @@
                     <div class="total-amount">Total: ₱0.00</div>
                     <input class="address" type="text" name="" value="">
                 </div>
-                <input type="submit" value="Order Now">
+                <input class="order-now-button" type="submit" value="Order Now">
             </div>
         </div>
     </div>

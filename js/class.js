@@ -1,84 +1,5 @@
 import { Ajax } from './modules/ajax.js';
 
-// Functions for MyItemsArray
-export function getMyItemsJson() {
-    const storedData = JSON.parse(localStorage.getItem('MyItemsArray'));
-    return storedData;
-}
-  
-export function getMyItemsArray() {
-    const storedData = getMyItemsJson();
-    let data = [];
-    storedData.forEach(element => {
-        data.push(element);
-    });
-    return data; 
-}
-
-
-// Functions for ItemsArray
-export function getItemsJson(){
-    const storedData = JSON.parse(localStorage.getItem('ItemsArray'));
-    return storedData;
-}
-
-export function getItemsArray() {
-    const storedData = getItemsJson();
-    let data = [];
-    storedData.forEach(element => {
-        data.push(element);
-    });
-    return data; 
-}
-
-// Functions for StoresArray
-export function getStoresJson(){
-    const storedData = JSON.parse(localStorage.getItem('StoresArray'));
-    return storedData;
-}
-
-export function getStoresArray() {
-    const storedData = getStoresJson();
-    let data = [];
-    storedData.forEach(element => {
-        data.push(element);
-    });
-    return data; 
-}
-
-
-// Functions for AccountDetails
-export function getAccountDetailsJson(){
-    const storedData = JSON.parse(localStorage.getItem('AccountDetails'));
-    return storedData;
-}
-
-export function getAccountDetailsArray() {
-    const storedData = getAccountDetailsJson();
-    let data = [];
-    storedData.forEach(element => {
-        data.push(element);
-    });
-    return storedData; 
-}
-
-
-// Functions for Transactions
-export function getTransactionsJson(){
-    const storedData = JSON.parse(localStorage.getItem('Transactions'));
-    return storedData;
-}
-
-export function getTransactionsArray() {
-    const storedData = getTransactionsJson();
-    let data = [];
-    storedData.forEach(element => {
-        data.push(element);
-    });
-    return storedData; 
-}
-
-
 export function AddItemToCart(newItem){
     let cartData = GetItemsFromCart();
     cartData.push(newItem);
@@ -319,83 +240,6 @@ export class Cart {
 
 
 
-
-
-export function refreshAllItems (AccountId, AuthToken, StoreId){
-    var formData = new FormData();
-    formData.append('AuthToken', AuthToken);
-    formData.append('AccountId', AccountId);
-    formData.append('StoreId', StoreId);
-    formData.append('Intent', 'Select Items');
-    Ajax.postFormData('../php/api/item.php', formData)
-    .then(responseJSON => {
-        localStorage.setItem('ItemsArray', JSON.stringify(responseJSON));
-    })
-    .catch(error => {
-        console.error('Error:', error); 
-    });
-}
-
-export function refreshMyItems (AccountId, AuthToken, StoreId){
-    var formData = new FormData();
-    formData.append('AuthToken', AuthToken);
-    formData.append('AccountId', AccountId);
-    formData.append('StoreId', StoreId);
-    formData.append('Intent', 'Select MyItems');
-    Ajax.postFormData('../php/api/item.php', formData)
-    .then(responseJSON => {
-        localStorage.setItem('MyItemsArray', JSON.stringify(responseJSON));
-    })
-    .catch(error => {
-        console.error('Error:', error); 
-    });
-}
-
-export function refreshAllStores (AccountId, AuthToken, StoreId){
-    var formData = new FormData();
-    formData.append('AuthToken', AuthToken);
-    formData.append('AccountId', AccountId);
-    formData.append('StoreId', StoreId);
-    formData.append('Intent', 'Select Store');
-    Ajax.postFormData('../php/api/store.php', formData)
-    .then(responseJSON => {
-        localStorage.setItem('StoresArray', JSON.stringify(responseJSON));
-    })
-    .catch(error => {
-        console.error('Error:', error); 
-    });
-}
-
-export function refreshAccountDetails (Intent, AccountId, AuthToken){
-    var formData = new FormData();
-    formData.append('AuthToken', AuthToken);
-    formData.append('AccountId', AccountId);
-    formData.append('Intent', Intent);
-    Ajax.postFormData('../php/api/account.php', formData)
-    .then(responseJSON => {
-        localStorage.setItem('AccountDetails', JSON.stringify(responseJSON));
-    })
-    .catch(error => {
-        console.error('Error:', error); 
-    });
-}
-
-export function refreshTransactions (AccountId, AuthToken){
-    var formData = new FormData();
-    formData.append('AuthToken', AuthToken);
-    formData.append('AccountId', AccountId);
-    formData.append('Intent', 'Select Transaction');
-    Ajax.postFormData('../php/api/transactions.php', formData)
-    .then(responseJSON => {
-        localStorage.setItem('Transactions', JSON.stringify(responseJSON));
-    })
-    .catch(error => {
-        console.error('Error:', error); 
-    });
-}
-
-
-
 export async function fetchAllItems (AccountId, AuthToken, StoreId){
     var formData = new FormData();
     formData.append('AuthToken', AuthToken);
@@ -412,15 +256,60 @@ export async function fetchAllItems (AccountId, AuthToken, StoreId){
     }
 }
 
-export async function fetchStoresItems (AccountId, AuthToken, StoreId){
+export async function fetchMyItems (AccountId, AuthToken, StoreId){
     var formData = new FormData();
     formData.append('AuthToken', AuthToken);
     formData.append('AccountId', AccountId);
     formData.append('StoreId', StoreId);
-    formData.append('Intent', 'Select Items');
+    formData.append('Intent', 'Select MyItems');
 
     try {
         const responseJSON = await Ajax.postFormData('../php/api/item.php', formData);
+        return responseJSON;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+export async function fetchAccountWithStore (AccountId, AuthToken){
+    var formData = new FormData();
+    formData.append('AuthToken', AuthToken);
+    formData.append('AccountId', AccountId);
+    formData.append('Intent', 'Select Account With Store');
+
+    try {
+        const responseJSON = await Ajax.postFormData('../php/api/account.php', formData);
+        return responseJSON;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+export async function fetchAccount(AccountId, AuthToken){
+    var formData = new FormData();
+    formData.append('AuthToken', AuthToken);
+    formData.append('AccountId', AccountId);
+    formData.append('Intent', 'Select Account With Store');
+
+    try {
+        const responseJSON = await Ajax.postFormData('../php/api/account.php', formData);
+        return responseJSON;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+export async function fetchTransactions(AccountId, AuthToken){
+    var formData = new FormData();
+    formData.append('AuthToken', AuthToken);
+    formData.append('AccountId', AccountId);
+    formData.append('Intent', 'Select Transaction');
+
+    try {
+        const responseJSON = await Ajax.postFormData('../php/api/transaction.php', formData);
         return responseJSON;
     } catch (error) {
         console.error('Error:', error);

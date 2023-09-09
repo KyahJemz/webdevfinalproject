@@ -19,6 +19,23 @@ const CartListContainer = document.querySelector('.cart-list-container');
 const HuntGridContainer = document.querySelector('.hunt-grid-container');
 const CategoryListContainer = document.querySelector('.category-list-container');
 
+function getRandomFromArray(array, count) {
+    const shuffled = array.slice();
+    let i = array.length;
+    const results = [];
+    while (i--) {
+        const rand = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[rand]] = [shuffled[rand], shuffled[i]];
+    }
+    if (array.length <= count) {
+        return shuffled;
+    }
+    for (let j = 0; j < count; j++) {
+        results.push(shuffled[j]);
+    }
+    return results;
+}
+
 function getUniqueCategory() {
     const uniqueCategories = new Set();
     const newArray = [];
@@ -178,8 +195,7 @@ function setCartDisplay() {
     CartListContainer.querySelector('.shipping-fee').innerHTML = `Shipping Fee: ${helper.formatPrice(shippingfee)}`;
     CartListContainer.querySelector('.total-shipping-fee').innerHTML = `Total Shipping Fee: ${helper.formatPrice(shippingfee * stores.length)}`;
     CartListContainer.querySelector('.total-amount').innerHTML = `Total: ${helper.formatPrice((shippingfee * stores.length) + totalprice)}`;
-    let AccountAddress = "";
-    CartListContainer.querySelector('.address').value = AccountAddress;
+    CartListContainer.querySelector('.address').value = Address;
 
     localStorage.setItem('Carts', JSON.stringify(Carts));
     helper.ElementsArrayAddClickListener(CartListContainer.querySelectorAll('.less-quantity'),lessQuantityEvent);
@@ -233,7 +249,60 @@ function addQuantityEvent(event){
 })();
 
 
+async function UploadOrder(){
+    const list = GetItemsFromCart();
+    const unique = new Set();
+    let StoresId = [];
+
+    let TransactionAmount = 0;
+    let TransactionStatus = "complete";
+    let TransactionOrders = JSON.stringify(list);
+    let TransactionBuyer = AccountId;
+    let TransactionSeller = JSON.stringify(StoresId);
+    let TransactionBuyerAddress = document.querySelector('.cart-footer .address').value;
 
 
+    list.forEach(item => {
+        TransactionAmount = (Number(TransactionAmount) + (Number(item._itemPrice) * Number(item._itemQuantity)));
+
+        if (item._storeId) {
+            if (!unique.has(item._storeId)) {
+                unique.add(item._storeId);
+                StoresId.push(item._storeId);
+            }
+        }
+    });
+
+    console.log(TransactionAmount+"-"+
+    TransactionStatus+"-"+
+    TransactionOrders+"-"+
+    TransactionBuyer+"-"+
+    TransactionSeller+"-"+
+    TransactionBuyerAddress);
+
+
+    var formData = new FormData();
+    formData.append('AuthToken', AuthToken);
+    formData.append('AccountId', AccountId);
+    formData.append('TransactionAmount', TransactionAmount);
+    formData.append('TransactionStatus', TransactionStatus);
+    formData.append('TransactionOrders', TransactionOrders);
+    formData.append('TransactionBuyer', TransactionBuyer);
+    formData.append('TransactionSeller', TransactionSeller);
+    formData.append('TransactionBuyerAddress', TransactionBuyerAddress);
+    formData.append('Intent', 'Insert Transaction');
+
+    try {
+        const responseJSON = await Ajax.postFormData('../php/api/transaction.php', formData);
+        return responseJSON;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+
+}
+helper.ElementsAddClickListener(document.querySelector('.order-now-button'),UploadOrder);
+
+UploadOrder();
 
 

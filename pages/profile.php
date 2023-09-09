@@ -30,14 +30,7 @@
                 <div class="title">Recent Transactions</div>
                 <div class="list scroll">
                     <div id="ProfileTransactionsContainer" class="list-container">
-                        <div class="list-item">
-                            <span class="left">
-                                <div class="user">No Transactions</div>
-                                <div class="type"></div>
-                                <div class="date"></div>
-                            </span>
-                            <span class="cost"></span>
-                        </div>   
+                        
                     </div>
                 </div>
             </div>

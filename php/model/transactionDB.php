@@ -1,12 +1,39 @@
 <?php 
 
+function InsertTransaction($TransactionAmount, $TransactionStatus,$TransactionOrders,$TransactionBuyer,$TransactionSeller,$TransactionBuyerAddress, $connection) {
+    $sql = "INSERT INTO tbl_transactions (TransactionAmount, TransactionStatus, TransactionOrders, TransactionBuyer, TransactionSeller, TransactionBuyerAddress) VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $connection->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("dssiss", $TransactionAmount, $TransactionStatus, $TransactionOrders, $TransactionBuyer, $TransactionSeller, $TransactionBuyerAddress);
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+
+
+// formData.append('AuthToken', AuthToken);
+// formData.append('AccountId', AccountId);
+// formData.append('TransactionAmount', TransactionAmount);
+// formData.append('TransactionStatus', TransactionStatus);
+// formData.append('TransactionOrders', TransactionOrders);
+// formData.append('TransactionBuyer', TransactionBuyer);
+// formData.append('TransactionSeller', TransactionSeller);
+// formData.append('TransactionBuyerAddress', TransactionBuyerAddress);
 
 
 function SelectTransaction($AccountId, $connection) {
-    $sql = "SELECT * FROM tbl_transactions WHERE TransactionSender = ? OR TransactionBuyer = ?";
+    $sql = "SELECT * FROM tbl_transactions WHERE TransactionBuyer = ?";
     $stmt = $connection->prepare($sql);
     if ($stmt) {
-        $stmt->bind_param("ii", $AccountId, $AccountId);
+        $stmt->bind_param("i", $AccountId);
         $stmt->execute();
         $result = $stmt->get_result();
         $items = array();

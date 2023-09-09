@@ -139,8 +139,12 @@
 }
 
 .hunt-grid-container .grid-item Button:hover {
-    transition: .5s;
-    transform: scale(1.05);
+    border-color: burlywood;
+}
+
+.hunt-grid-container .grid-item Button:active {
+    transform: scale(0.95);
+    box-shadow: 0px 0px 10px 1px rgba(109, 109, 109, 0.411);
 }
 
 .hunt-grid-container,
@@ -169,11 +173,6 @@
 
 .cart-list-container .cart-footer{
     text-align: right;
-}
-
-
-.cart-list-container .cart-body{
-
 }
 
 .cart-list-container .list-container{
