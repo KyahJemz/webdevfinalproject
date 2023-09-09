@@ -130,7 +130,6 @@ function ProfileMystoreAddItemForm(event){
 function ProfileMystoreAddShop(event){
     event.preventDefault();
     const formData = new FormData(event.currentTarget.parentNode);
-
     formData.append('Username', Username);
     formData.append('AuthToken', AuthToken);
     formData.append('AccountId', AccountId);
@@ -140,14 +139,14 @@ function ProfileMystoreAddShop(event){
     .then(response => response.json())
     .then(data => {
         console.log(data);
-    }).then(ProfileMystoreRefreshList())
+    })
+    .then(refreshAccountDetails('Select Account With Store',AccountId, AuthToken, StoreId))
+    .then(MyShop ())
     .catch(error => {
         console.error(error);
     });
 }
-
-
-
+;
 // #############################################################################
 // ADD ITEM API
 // #############################################################################
@@ -272,10 +271,7 @@ function ProfileMyprofileEditProfileForm() {
             <p class="left store-name"><a>Store Name: </a>${data[0]['StoreName']}</p>
             <p class="left store-orders"><a>Store Orders: </a>${data[0]['StoreOrders']}</p>
         `;
-        }
-
-        
-        
+        } 
     }
 }
 
@@ -290,7 +286,9 @@ function ProfileMyprofileUpdateAccount(event){
     .then(response => response.json())
     .then(data => {
         console.log(data);
-    }).then(ProfileMyprofileEditProfileForm())
+    })
+    .then(refreshAccountDetails('Select Account With Store',AccountId, AuthToken, StoreId))
+    .then(setTimeout(ProfileMyprofileEditProfileForm, 1000))
     .catch(error => {
         console.error(error);
     });
@@ -308,7 +306,9 @@ function ProfileMyprofileUpdateStore(event){
     .then(response => response.json())
     .then(data => {
         console.log(data);
-    }).then(ProfileMyprofileEditProfileForm())
+    })
+    .then(refreshAccountDetails('Select Account With Store',AccountId, AuthToken, StoreId))
+    .then(setTimeout(ProfileMyprofileEditProfileForm, 1000))
     .catch(error => {
         console.error(error);
     });
@@ -410,15 +410,13 @@ function MyShop (){
 
     if (StoreId == "" || StoreId == null){
         document.querySelector('.mystore').innerHTML = document.querySelector('.mystore').innerHTML + NoShop;
+        helper.ElementsAddClickListener(document.getElementById('add-store-button'),ProfileMystoreAddShop);
     } else {
         document.querySelector('.mystore').innerHTML = document.querySelector('.mystore').innerHTML + Shop;
         document.querySelector('.mystore-header').innerHTML = document.querySelector('.mystore-header').innerHTML +
         `<div id="ProfileMyshopAddItemFormButton" class="icons add-item-form-button" title="Add item"></div>`;
         ProfileMystoreContainer = document.getElementById('ProfileMystoreContainer');
-        var ProfileMystoreAddItemFormButton = document.getElementById('ProfileMyshopAddItemFormButton');
-        var ProfileMystoreAddStoreButton = document.getElementById('add-store-button');
-        helper.ElementsAddClickListener(ProfileMystoreAddStoreButton,ProfileMystoreAddShop);
-        helper.ElementsAddClickListener(ProfileMystoreAddItemFormButton,ProfileMystoreAddItemForm);
+        helper.ElementsAddClickListener(document.getElementById('ProfileMyshopAddItemFormButton'),ProfileMystoreAddItemForm);
         ProfileMystoreRefreshList();
     }
 }
@@ -429,7 +427,8 @@ helper.ElementsAddClickListener(ProfileMyprofileEditProfileButton,ProfileMyprofi
 
 
 function MyTransactions(){
-    
+    const data = getTransactionsArray();
+    console.log(date);
     const empty = `
         <div class="list-item">
             <span class="left">
@@ -440,7 +439,24 @@ function MyTransactions(){
             <span class="cost"></span>
         </div>
     `;
-
-
-
+    if (!empty(data)){
+        document.getElementById('ProfileTransactionsContainer').innerHTML = ``;
+        data.forEach(element => {
+            document.getElementById('ProfileTransactionsContainer').innerHTML = document.getElementById('ProfileTransactionsContainer').innerHTML + `
+                <div class="list-item">
+                    <span class="left">
+                        <div class="user">No Transactions</div>
+                        <div class="type"></div>
+                        <div class="date"></div>
+                    </span>
+                    <span class="cost"></span>
+                </div>
+            `;
+        });    
+    } else {
+        document.getElementById('ProfileTransactionsContainer').innerHTML = empty;
+    }
+    
 }
+
+MyTransactions();

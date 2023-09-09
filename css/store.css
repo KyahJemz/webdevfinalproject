@@ -1,0 +1,98 @@
+.container {
+    padding: 20px;
+    padding-left: 200px;
+    padding-right: 200px;
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 20px;
+    height: 95%;
+    font-size: 0.8rem;
+}
+
+body {
+    overflow: hidden;
+}
+
+.container > div{
+    padding: 10px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.container > div .title{
+    padding-bottom: 10px;
+    border-bottom: 1px solid gainsboro;
+    font-size: 0.8rem;
+    font-weight: 550;
+}
+
+.stores-grid-container .grid-container{
+    padding-right: 10px;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px; 
+    white-space: nowrap;
+}
+
+.stores-grid-container .grid-item{
+    width: 140px;
+    height: 210px;
+    overflow: hidden;
+    background-color: burlywood;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+.stores-grid-container .grid-item .StoreImage{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: auto;
+    margin-top: 10px;
+    font-size: 0.7rem;
+    border: 1px solid gainsboro;
+    overflow: hidden;
+}
+
+.stores-grid-container .grid-item .StoreName {
+    font-size: 0.9rem;
+    font-weight: 550;
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+.stores-grid-container .grid-item .Button {
+    margin-top: 15px;
+    padding-top: 15px;
+    text-align: center;
+    width: 100%;
+    border-top: 1px solid gainsboro;
+}
+
+
+.stores-grid-container .grid-item Button {
+    width: 100%;
+    background-color:  white;
+    border: 1px solid white;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.stores-grid-container .grid-item Button:hover {
+    transition: .5s;
+    transform: scale(1.05);
+}
+
+.scroll-container {
+    height: 95%;
+    overflow-y: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+

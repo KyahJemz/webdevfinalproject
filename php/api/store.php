@@ -8,19 +8,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['Intent'])) {
         if ($_POST['Intent'] === "Insert Store") {
-            if (isset($_FILES['store-image'])) {
+            if (isset($_FILES['StoreImage'])) {
                 $AuthToken = $_POST['AuthToken'];
                 $AccountId = $_POST['AccountId'];
-                $StoreName = sanitize($_POST['store-name']);
+                $StoreName = sanitize($_POST['StoreName']);
                 $StoreImage = 'STORE-'.$StoreName.'.jpg';
 
                 if (validateUserSession($AccountId,$AuthToken,$connection)){
                     if(ValidateIfStoreExist($StoreName,$connection)){
                         $uploadDir = '../../images/uploads/stores/';
-                        $uploadedFile = $_FILES['store-image'];
+                        $uploadedFile = $_FILES['StoreImage'];
                         $originalFileName = $uploadedFile['name'];
                         $tempFilePath = $uploadedFile['tmp_name'];
-                        $newFileName = 'STORE-' . $_POST['store-name'] . ".jpg";
+                        $newFileName = 'STORE-' . $StoreName . ".jpg";
                         $targetFilePath = $uploadDir . $newFileName;
                 
                         if (move_uploaded_file($tempFilePath, $targetFilePath)) {

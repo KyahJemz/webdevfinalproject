@@ -55,6 +55,16 @@ label {
     font-size: 0.9rem;
 }
 
+body {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
 
 .nav-bar{
     flex: 0 0 50px;
@@ -71,26 +81,32 @@ label {
     border-bottom-right-radius: 10px;
 }
 
+.nav-bar .nav-bar-item{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .nav-bar .nav-bar-item div{
     height: 100%;
+    margin: 0;
+    padding: 0;
 
 }
 
-.nav-bar .logo {
-    padding-left: 20px;
-    justify-self: start;
-}
-
+.nav-bar .logo,
 .nav-bar .tab-nav-bar,
 .nav-bar .profile-nav-bar {
     display: flex;
 }
 
-.nav-bar .tab-nav-bar {
-    height: 100%;
-    padding: 0;
-
+.nav-bar .logo div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .nav-bar .tab-nav-bar div{
     display: flex;
     flex-direction: column;
@@ -101,19 +117,6 @@ label {
     cursor: pointer;
 }
 
-.icons {
-    background-position: center;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: scale 1s;
-}
-
-.icons:hover{
-    transform: scale(1.1);
-}
-
-
 .nav-bar .tab-nav-bar div:hover {
     background-color: rgba(222, 184, 135, 0.658);
 }
@@ -121,24 +124,37 @@ label {
 .nav-bar .tab-nav-bar a{
     text-decoration: none;
     color: gray;
+    height:50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-bar .profile-nav-bar {
     justify-self: end;
     gap: 10px;
-    padding: 10px;
     padding-right: 20px;
     justify-items: end;
 }
 
-.nav-bar .profile-nav-bar .icons{
+.nav-bar .profile-nav-bar .icon{
     width: 30px;
     height: 30px;
     background-size:75%;
     background-color: gainsboro;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    border-width: 0px;
+    cursor: pointer;
 }
 
-.nav-bar .profile-nav-bar .icons:hover{
+.nav-bar .profile-nav-bar form{
+    width: 30px;
+    height: 30px;
+}
+
+.nav-bar .profile-nav-bar .icon:hover{
     transform: scale(1.1);
 }
 
@@ -167,3 +183,17 @@ label {
     overflow-y: scroll;
     scroll-behavior: smooth;
 }
+
+.icons {
+    background-color: gainsboro;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    border-width: 0px;
+    cursor: pointer;
+}
+
+.icons:hover{
+    transform: scale(1.1);
+}
+

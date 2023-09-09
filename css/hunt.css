@@ -1,0 +1,309 @@
+.content {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 200px 1fr 300px;
+    column-gap: 20px;
+    height: 100%;
+    font-size: 0.8rem;
+}
+
+.content > div{
+    padding: 10px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.content > div .title{
+    padding-bottom: 10px;
+    border-bottom: 1px solid gainsboro;
+    font-size: 0.8rem;
+    font-weight: 550;
+}
+
+.category-list-container .list-container{
+    gap: 10px;
+
+}
+
+.category-list-container .list-item{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 1px solid burlywood;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.category-list-container .list-item:hover{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 1px solid burlywood;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.category-list-container .list-container .selected{
+    background-color: burlywood;
+}
+
+.category-list-container .list-container {
+    overflow-y: scroll;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 10px;
+}
+
+.category-list-container .list-container .list-item{
+    width: 100%;
+}
+
+.hunt-grid-container .grid-container{
+    padding-right: 10px;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px; 
+    white-space: nowrap;
+}
+
+.hunt-grid-container .grid-item{
+    width: 140px;
+    height: 210px;
+    overflow: hidden;
+    background-color: burlywood;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+.hunt-grid-container .grid-item .StoreName{
+    width: 100%;
+    font-size: 0.7rem;
+    padding-bottom: 2.5px;
+    margin-bottom: 2.5px;
+    border-bottom: 1px solid white;
+}
+
+.hunt-grid-container .grid-item .ItemImage{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 0.7rem;
+    padding-bottom: 2.5px;
+    margin-bottom: 2.5px;
+    border: 1px solid burlywood;
+    overflow: hidden;
+}
+
+.hunt-grid-container .grid-item .ItemName {
+    font-size: 0.9rem;
+    font-weight: 550;
+    text-align: center;
+}
+
+
+.hunt-grid-container .grid-item .ItemCategory {
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+.hunt-grid-container .grid-item .ItemPrice {
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+
+.hunt-grid-container .grid-item .Button {
+    text-align: center;
+    margin-top: 5px;
+    width: 100%;
+    border-top: 1px solid white;
+    padding-top: 5px;
+}
+
+.hunt-grid-container .grid-item Button {
+    width: 100%;
+    background-color:  white;
+    border: 1px solid white;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.hunt-grid-container .grid-item Button:hover {
+    transition: .5s;
+    transform: scale(1.05);
+}
+
+.hunt-grid-container,
+.cart-list-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-list-container .cart-title {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-content: center;
+}
+
+.cart-list-container .cart-body {
+    flex: 1;
+    height: 100%;
+}
+
+.cart-list-container .cart-footer .total{
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart-list-container .cart-footer{
+    text-align: right;
+}
+
+
+.cart-list-container .cart-body{
+
+}
+
+.cart-list-container .list-container{
+    overflow-y: scroll;
+    height: 100%;
+    padding-right: 10px;
+}
+
+.cart-list-container .list-item{
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    padding-right: 10px;
+    background-color: burlywood;
+    position: relative;
+    align-items: center;
+    padding-left: 10px;
+    gap: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.cart-list-container .list-item .ItemQuantity{
+    position: absolute;
+    bottom: 5px;
+    right: 7px;
+    display: flex;
+}
+
+.cart-list-container .list-item .ItemQuantity > *{
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-list-container .list-item .ItemQuantity button{
+    background-color: white;
+    cursor: pointer;
+    border: 0px;
+    border-radius: 5px;
+}
+
+.cart-list-container .list-item .ItemQuantity button:active{
+    transform: scale(0.9);
+    box-shadow: 0px 0px 10px 1px rgba(109, 109, 109, 0.411);
+}
+
+.cart-list-container .list-item .ItemImage{
+    width: 55px;
+    height: 55px;
+    aspect-ratio: 1/1;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.cart-list-container .list-item img{
+    width: 55px;
+    height: 55px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.cart-list-container .list-item .ItemDetails{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 2px;
+    font-weight: 600;
+}
+
+.cart-list-container .cart-footer .total{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.cart-list-container .cart-footer .shipping{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.cart-list-container .cart-footer .summary{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+
+.cart-list-container .cart-footer .total-amount{
+    flex-wrap: nowrap;
+    text-wrap: nowrap;
+}
+
+.cart-list-container .cart-footer input{
+    width: 100%;
+    padding: 0;
+}
+
+.cart-list-container .cart-footer input[type='submit']{
+    background-color: burlywood;
+    border: 1px solid rgba(0, 0, 0, 0.301);
+    padding-top: 2px;
+    padding-bottom: 2px;
+    cursor: pointer;
+}
+
+.cart-list-container .cart-footer input[type='submit']:active{
+    transform: scale(0.95);
+    box-shadow: 0px 0px 10px 1px rgba(109, 109, 109, 0.411);
+}
+
+
+
+
+
+
+
+.scroll-container {
+    height: 100%;
+    overflow-y: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+
+

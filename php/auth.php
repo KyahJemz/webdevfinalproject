@@ -108,8 +108,14 @@ function generateAuthToken($Username,$connection) {
     }
 }
 
-function Logout(){
+function Logout() {
     session_unset();
     session_destroy();
+
+    echo '<script>';
+    echo 'localStorage.clear();';
+    echo '</script>';
+
     header('Location: ../index.php');
+    exit; 
 }
