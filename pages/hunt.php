@@ -22,7 +22,11 @@
             </div>
         </div>
         <div class="hunt-grid-container">
-            <p class="hunt-title title">Hunt Items</p>
+            <div class="header">
+                <p class="hunt-title title">Hunt Items</p>
+                <input type="text" class="hunt-search" placeholder="Search..." value="">
+            </div>
+            
             <div class="scroll-container">
                 <div class="grid-container">
                    

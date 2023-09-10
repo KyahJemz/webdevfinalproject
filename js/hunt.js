@@ -12,6 +12,7 @@ import {
 var Items = [];
 var Carts = [];
 var Category = [];
+var Search = "";
 
 const helper = new Helper();
 
@@ -55,17 +56,38 @@ function setHuntDisplay(){
     let array = [];
 
     const filters = getFilteredCategory();
-    if (filters.length > 0) {
+
+
+
+    if(filters.length <= 0){
+        Items.forEach(item => {
+            if(item._ItemName.toUpperCase().includes(Search)) {
+                array.push(item);
+            }
+        });
+    } else { 
         filters.forEach(filter => {
             Items.forEach(item => {
-                if (filter === item._ItemCategory){
+                if(item._ItemCategory == filter && item._ItemName.toUpperCase().includes(Search)) {
                     array.push(item);
-                } 
-            });
+                }
+            })
         });
-    } else {
-        array = Items;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     const container = HuntGridContainer.querySelector('.grid-container');
     container.innerHTML = '';
@@ -219,35 +241,37 @@ function addQuantityEvent(event){
     }
 }
 
-
-(async () => {
-    try {
-        const fetchItems = await fetchAllItems(AccountId, AuthToken, StoreId);
-        if (Array.isArray(fetchItems)) {
-            fetchItems.forEach(element => {
-                Items.push(new Item(
-                    element['ItemId'],
-                    element['ItemName'],
-                    element['ItemCategory'],
-                    element['ItemPrice'],
-                    element['ItemImage'],
-                    element['StoreId'],
-                    element['StoreName'],
-                    element['StoreImage'],
-                    element['AccountId']
-                ));
-            });
-            setCartDisplay();
-            setCategoryDisplay();
-            setHuntDisplay();
-        } else {
-            console.log('fetchItems is not an array.');
+function getItems(){
+    (async () => {
+        try {
+            const fetchItems = await fetchAllItems(AccountId, AuthToken, StoreId);
+            if (Array.isArray(fetchItems)) {
+                fetchItems.forEach(element => {
+                    Items.push(new Item(
+                        element['ItemId'],
+                        element['ItemName'],
+                        element['ItemCategory'],
+                        element['ItemPrice'],
+                        element['ItemImage'],
+                        element['StoreId'],
+                        element['StoreName'],
+                        element['StoreImage'],
+                        element['AccountId']
+                    ));
+                });
+                setCartDisplay();
+                setCategoryDisplay();
+                setHuntDisplay();
+            } else {
+                console.log('fetchItems is not an array.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-})();
+    })();
+}
 
+getItems();
 
 function UploadOrder() {
     Upload()
@@ -285,7 +309,6 @@ function UploadOrder() {
         TransactionSeller+"-"+
         TransactionBuyerAddress);
 
-
         var formData = new FormData();
         formData.append('AuthToken', AuthToken);
         formData.append('AccountId', AccountId);
@@ -309,4 +332,8 @@ function UploadOrder() {
 }
 helper.ElementsAddClickListener(document.querySelector('.order-now-button'),UploadOrder);
 
+document.querySelector('.hunt-search').addEventListener('input', () => {
+    Search = document.querySelector('.hunt-search').value;
+    setHuntDisplay();
+})
 
