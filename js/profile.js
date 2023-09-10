@@ -16,6 +16,7 @@ import {
 refreshMyTransactions();
 refreshMyItems();
 refreshMyAccount();
+refreshMyStore();
 
 function refreshMyItems(){
     (async () => {
@@ -47,6 +48,30 @@ function refreshMyAccount(){
             if (Array.isArray(fetch)) {
                 localStorage.setItem('Account', JSON.stringify(fetch));
                 ProfileMyprofileEditProfileForm(fetch);
+                // console.log(JSON.parse(localStorage.getItem('Account')));
+            } else {
+                console.log('fetchItems is not an array.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    })();
+}
+
+
+function refreshMyStore(){
+    (async () => {
+        try {
+            let fetch = null;
+            if (StoreId === null || StoreId === ""){
+                fetch = await fetchAccount(AccountId, AuthToken);
+            } else {
+                fetch = await fetchAccountWithStore(AccountId, AuthToken);
+            }
+            
+            if (Array.isArray(fetch)) {
+                localStorage.setItem('Account', JSON.stringify(fetch));
+                MyShop (fetch);
                 // console.log(JSON.parse(localStorage.getItem('Account')));
             } else {
                 console.log('fetchItems is not an array.');
@@ -95,9 +120,12 @@ var ProfileMyprofileContainer = document.getElementById('ProfileMyprofileContain
 // #############################################################################
 function ProfileMystoreRefreshList(list){
 
-    ProfileMystoreContainer.innerHTML = ``;
+    ProfileMystoreContainer = document.getElementById('ProfileMystoreContainer');
 
-    ProfileMystoreContainer.innerHTML = `
+    if (ProfileMystoreContainer) {
+        ProfileMystoreContainer.innerHTML = '';
+
+        ProfileMystoreContainer.innerHTML = `
         <div class="list-item add-item-form-container" style="padding-top: 0px; padding-bottom: 0px; margin-bottom: 0px">
             <div class="bottom add-item-form" style="height: 0">
                 <form id="form-add-item" style="border-top-width: 0px" action="../php/api/item.php" method="post" enctype="multipart/form-data">
@@ -122,7 +150,7 @@ function ProfileMystoreRefreshList(list){
                     <div class="contents">
                         <p class="item-name">${item.ItemName}</p>
                         <p class="item-category">${item.ItemCategory}</p>
-                        <p class="item-price">${item.ItemPrice}</p>
+                        <p class="item-price">${helper.formatPrice(item.ItemPrice)}</p>
                     </div>
                     <div class="actions">
                         <div class="icons edit-button" title="Edit"></div>
@@ -143,6 +171,11 @@ function ProfileMystoreRefreshList(list){
         `;
 
     });
+    }
+
+    
+
+    
     bindProfileMyshopContainerButtons ();
 }
 
@@ -185,11 +218,8 @@ function ProfileMystoreAddShop(event){
     Ajax.postFormData('../php/api/store.php',formData)
     .then(data => {
         console.log(data);
-        refreshMyAccount();
-        refreshMyItems();
-        MyShop();
+        window.location.reload();
     })
-    .then(MyShop ())
     .catch(error => {
         console.error(error);
     });
@@ -282,12 +312,13 @@ function ProfileMyprofileEditProfileForm(list) {
         <p class="left joined-date"><a>Joined Date: </a>${data[0]['JoinedDate']}</p>
         <p class="left success-orders"><a>Success Orders: </a>${data[0]['SuccessOrders']}</p>
     `;
+    console.log("PROFILE",data[0].StoreId );
     if (ProfileMyprofileContainer.dataset.view === 'view') {
         ProfileMyprofileContainer.innerHTML = "";
         console.log("On View");
         ProfileMyprofileContainer.dataset.view = 'edit';
         ProfileMyprofileContainer.innerHTML = EditFrom;
-        if (StoreId == "" || StoreId == null){ 
+        if (data[0].StoreId == "" || data[0].StoreId == null){ 
         } else {
             ProfileMyprofileContainer.innerHTML = ProfileMyprofileContainer.innerHTML + `
             <form action="../php/api/Shop.php" method="post" enctype="multipart/form-data">
@@ -297,7 +328,7 @@ function ProfileMyprofileEditProfileForm(list) {
                 <label for="StoreName">Store Name:</label>
                 <input type="text" name="StoreName" value="${data[0]['StoreName']}">
                 <label for="StoreDelete">Store Delete:</label>
-                <input type="checkbox" name="StoreDelete">
+                <input class="DeleteStore" type="checkbox" name="StoreDelete">
                 <input id="update-store-button" type="submit" value="Save store changes">
             </form>
         `;
@@ -310,7 +341,7 @@ function ProfileMyprofileEditProfileForm(list) {
         ProfileMyprofileContainer.innerHTML = "";
         ProfileMyprofileContainer.dataset.view = 'view';
         ProfileMyprofileContainer.innerHTML = DisplayItems;
-        if (StoreId == "" || StoreId == null){ 
+        if (data[0].StoreId == "" || data[0].StoreId == null){ 
         } else {
             ProfileMyprofileContainer.innerHTML = ProfileMyprofileContainer.innerHTML + `
             <br>
@@ -344,12 +375,18 @@ function ProfileMyprofileUpdateStore(event){
     formData.append('AuthToken', AuthToken);
     formData.append('AccountId', AccountId);
     formData.append('StoreId', StoreId);
-    formData.append('Intent', "Update Store");
+
+    if (event.currentTarget.parentNode.querySelector('.DeleteStore').checked) {
+        formData.append('Intent', "Delete Store");
+    } else {
+        formData.append('Intent', "Update Store");
+    }
 
     Ajax.postFormData('../php/api/store.php',formData)
     .then(data => {
         console.log(data);
-        refreshMyAccount();
+        refreshMyStore();
+        window.location.reload();
     })
     .catch(error => {
         console.error(error);
@@ -416,7 +453,7 @@ function bindProfileMyshopContainerButtons () {
     helper.ElementsAddClickListener(AddItemButtons,ProfileMystoreAddItem);
 }
 
-function MyShop (){
+function MyShop (list){
     const Shop = `
         <div class="list-scroll">
             <div id="ProfileMystoreContainer" class="list-container">
@@ -449,8 +486,10 @@ function MyShop (){
             </form>
         </div>
     `;
+    console.log(list);
+    console.log("STORE",list[0].StoreId);
 
-    if (StoreId == "" || StoreId == null){
+    if (!(typeof list[0].StoreId !== 'undefined' && list[0].StoreId !== null && list[0].StoreId !== '')){
         document.querySelector('.mystore').innerHTML = document.querySelector('.mystore').innerHTML + NoShop;
         helper.ElementsAddClickListener(document.getElementById('add-store-button'),ProfileMystoreAddShop);
     } else {
@@ -463,7 +502,6 @@ function MyShop (){
     }
 }
 
-MyShop();
 helper.ElementsAddClickListener(ProfileMyprofileEditProfileButton,ProfileMyprofileEditProfileForm);
 
 function MyTransactions(list){
@@ -489,7 +527,7 @@ function MyTransactions(list){
                         <div class="type">${element.TransactionStatus}</div>
                         <div class="date">${element.TransactionTimestamp}</div>
                     </span>
-                    <span class="cost">${element.TransactionAmount}</span>
+                    <span class="cost">${helper.formatPrice(element.TransactionAmount) }</span>
                 </div>
             `;
         });    

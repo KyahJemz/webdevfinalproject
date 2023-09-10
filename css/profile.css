@@ -152,8 +152,12 @@ body {
   padding-right: 8px;
 }
 
-.transactions .list-container,
 .mystore .list-container {
+    height: 95%;
+    overflow-y: scroll;
+}
+
+.transactions .list-container{
     height: 95%;
 }
 

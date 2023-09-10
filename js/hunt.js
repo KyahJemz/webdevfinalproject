@@ -249,60 +249,64 @@ function addQuantityEvent(event){
 })();
 
 
-async function UploadOrder(){
-    const list = GetItemsFromCart();
-    const unique = new Set();
-    let StoresId = [];
+function UploadOrder() {
+    Upload()
+    async function Upload(){       
 
-    let TransactionAmount = 0;
-    let TransactionStatus = "complete";
-    let TransactionOrders = JSON.stringify(list);
-    let TransactionBuyer = AccountId;
-    let TransactionSeller = JSON.stringify(StoresId);
-    let TransactionBuyerAddress = document.querySelector('.cart-footer .address').value;
+        const list = GetItemsFromCart();
+        const unique = new Set();
+        let StoresId = [];
+
+        let TransactionAmount = 0;
+        let TransactionStatus = "complete";
+        let TransactionOrders = JSON.stringify(list);
+        let TransactionBuyer = AccountId;
+        
+        let TransactionBuyerAddress = document.querySelector('.cart-footer .address').value;
 
 
-    list.forEach(item => {
-        TransactionAmount = (Number(TransactionAmount) + (Number(item._itemPrice) * Number(item._itemQuantity)));
+        list.forEach(item => {
+            TransactionAmount = (Number(TransactionAmount) + (Number(item._itemPrice) * Number(item._itemQuantity)));
 
-        if (item._storeId) {
-            if (!unique.has(item._storeId)) {
-                unique.add(item._storeId);
-                StoresId.push(item._storeId);
+            if (item._storeId) {
+                if (!unique.has(item._storeId)) {
+                    unique.add(item._storeId);
+                    StoresId.push(item._storeId);
+                }
             }
+        });
+
+        let TransactionSeller = JSON.stringify(StoresId);
+
+        console.log(TransactionAmount+"-"+
+        TransactionStatus+"-"+
+        TransactionOrders+"-"+
+        TransactionBuyer+"-"+
+        TransactionSeller+"-"+
+        TransactionBuyerAddress);
+
+
+        var formData = new FormData();
+        formData.append('AuthToken', AuthToken);
+        formData.append('AccountId', AccountId);
+        formData.append('TransactionAmount', TransactionAmount);
+        formData.append('TransactionStatus', TransactionStatus);
+        formData.append('TransactionOrders', TransactionOrders);
+        formData.append('TransactionBuyer', TransactionBuyer);
+        formData.append('TransactionSeller', TransactionSeller);
+        formData.append('TransactionBuyerAddress', TransactionBuyerAddress);
+        formData.append('Intent', 'Insert Transaction');
+        try {
+            const responseJSON = await Ajax.postFormData('../php/api/transaction.php', formData);
+            localStorage.clear();
+            window.location.reload();
+            return responseJSON;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
         }
-    });
-
-    console.log(TransactionAmount+"-"+
-    TransactionStatus+"-"+
-    TransactionOrders+"-"+
-    TransactionBuyer+"-"+
-    TransactionSeller+"-"+
-    TransactionBuyerAddress);
-
-
-    var formData = new FormData();
-    formData.append('AuthToken', AuthToken);
-    formData.append('AccountId', AccountId);
-    formData.append('TransactionAmount', TransactionAmount);
-    formData.append('TransactionStatus', TransactionStatus);
-    formData.append('TransactionOrders', TransactionOrders);
-    formData.append('TransactionBuyer', TransactionBuyer);
-    formData.append('TransactionSeller', TransactionSeller);
-    formData.append('TransactionBuyerAddress', TransactionBuyerAddress);
-    formData.append('Intent', 'Insert Transaction');
-
-    try {
-        const responseJSON = await Ajax.postFormData('../php/api/transaction.php', formData);
-        return responseJSON;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
     }
-
 }
 helper.ElementsAddClickListener(document.querySelector('.order-now-button'),UploadOrder);
-
-UploadOrder();
 
 

@@ -58,12 +58,6 @@ export function GetItemsFromCart() {
     return Carts;
 }
 
-
-
-
-
-
-
 export class Store {
     constructor(StoreId, StoreName, StoreImage, StoreOwner) {
         this._StoreId = StoreId;

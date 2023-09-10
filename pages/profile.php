@@ -28,7 +28,7 @@
             </div>
             <div class="transactions">
                 <div class="title">Recent Transactions</div>
-                <div class="list scroll">
+                <div class="list-scroll">
                     <div id="ProfileTransactionsContainer" class="list-container">
                         
                     </div>
