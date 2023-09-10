@@ -1,3 +1,4 @@
+import Alert from './modules/alert.js';
 import { Helper } from './modules/helper.js';
 import { Ajax } from './modules/ajax.js';
 import { 
@@ -28,7 +29,6 @@ function refreshMyItems(){
             if (Array.isArray(fetch)) {
                 localStorage.setItem('MyItems', JSON.stringify(fetch));
                 ProfileMystoreRefreshList(fetch);
-                // console.log(JSON.parse(localStorage.getItem('Account')));
             } else {
                 console.log('fetchItems is not an array.');
             }
@@ -51,7 +51,6 @@ function refreshMyAccount(){
             if (Array.isArray(fetch)) {
                 localStorage.setItem('Account', JSON.stringify(fetch));
                 ProfileMyprofileEditProfileForm(fetch);
-                // console.log(JSON.parse(localStorage.getItem('Account')));
             } else {
                 console.log('fetchItems is not an array.');
             }
@@ -75,7 +74,6 @@ function refreshMyStore(){
             if (Array.isArray(fetch)) {
                 localStorage.setItem('Account', JSON.stringify(fetch));
                 MyShop (fetch);
-                // console.log(JSON.parse(localStorage.getItem('Account')));
             } else {
                 console.log('fetchItems is not an array.');
             }
@@ -91,7 +89,6 @@ function refreshMyTransactions(){
             const fetch = await fetchTransactions(AccountId, AuthToken);
             if (Array.isArray(fetch)) {
                 localStorage.setItem('MyTransactions', JSON.stringify(fetch));
-                // console.log(JSON.parse(localStorage.getItem('Account')));
                 MyTransactions(fetch);
             } else {
                 console.log('fetchItems is not an array.');
@@ -150,8 +147,6 @@ var Carts = [];
 var Category = [];
 
 const helper = new Helper();
-
-
 
 var ProfileMystoreContainer = null;
 
@@ -216,9 +211,6 @@ function ProfileMystoreRefreshList(list){
 
     });
     }
-
-    
-
     
     bindProfileMyshopContainerButtons ();
 }
@@ -262,7 +254,12 @@ function ProfileMystoreAddShop(event){
     Ajax.postFormData('../php/api/store.php',formData)
     .then(data => {
         console.log(data);
-        window.location.reload();
+        if(data) {
+            Alert.SendAlert("success", "Store created! reloading page...", 3000);
+        }
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
     })
     .catch(error => {
         console.error(error);
@@ -284,6 +281,9 @@ function ProfileMystoreAddItem(event){
     .then(data => {
         console.log(data);
         refreshMyItems()
+        if(data) {
+            Alert.SendAlert("success", "Item added successfully", 3000);
+        }
     })
     .catch(error => {
         console.error(error);
@@ -309,6 +309,9 @@ function ProfileMyshopDeleteItem(event){
     .then(data => {
         console.log(data);
         refreshMyItems();
+        if(data) {
+            Alert.SendAlert("success", "Item deleted successfully", 3000);
+        }
     })
     .catch(error => {
         console.error(error);
@@ -407,6 +410,9 @@ function ProfileMyprofileUpdateAccount(event){
     .then(data => {
         console.log(data);
         refreshMyAccount();
+        if(data) {
+            Alert.SendAlert("success", "Account updated successfully", 3000);
+        }
     })
     .catch(error => {
         console.error(error);
@@ -430,7 +436,13 @@ function ProfileMyprofileUpdateStore(event){
     .then(data => {
         console.log(data);
         refreshMyStore();
-        window.location.reload();
+        if(data) {
+            Alert.SendAlert("success", "Store updated successfully! Reloading page...", 3000);
+        }
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+
     })
     .catch(error => {
         console.error(error);
@@ -473,6 +485,7 @@ function ProfileMyshopUpdateItem(event){
     .then(data => {
         console.log(data);
         refreshMyItems()
+        Alert.SendAlert("success", "Item updated successfully", 3000);
     })
     .catch(error => {
         console.error(error);

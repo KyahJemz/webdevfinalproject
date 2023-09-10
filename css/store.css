@@ -7,7 +7,7 @@
     column-gap: 20px;
     height: 95%;
     font-size: 0.8rem;
-    background-color: rgba(0, 0, 0, 0.247);
+    
 }
 
 body {
@@ -25,7 +25,7 @@ body {
 
 .container > div .title{
     padding-bottom: 10px;
-    border-bottom: 1px solid gainsboro;
+    border-bottom: 1px solid rgb(0, 0, 0);
     font-size: 0.8rem;
     font-weight: 550;
 }

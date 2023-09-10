@@ -1,3 +1,4 @@
+import Alert from './modules/alert.js';
 import { Helper } from './modules/helper.js';
 import { Ajax } from './modules/ajax.js';
 import { 
@@ -133,6 +134,7 @@ function AddToCartClick(event){
     console.log('Added');
     console.log(GetItemsFromCart());
     element.remove();
+    Alert.SendAlert("success", `${element.dataset.itemname} is added to your cart`, 3000);
 }
 
 function setSuggestedStores() {
@@ -160,3 +162,14 @@ function addBanner(item){
     }
 }
 
+
+
+Alert.SendAlert("warning", "Test", 3000);
+
+setTimeout(() => {
+    Alert.SendAlert("success", "Test", 3000);
+}, 1000);
+
+setTimeout(() => {
+    Alert.SendAlert("danger", "Test", 3000);
+}, 2000);

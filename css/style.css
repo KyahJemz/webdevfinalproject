@@ -198,3 +198,67 @@ body {
     transform: scale(1.1);
 }
 
+
+.alert-container {
+    z-index: 10;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+    height: fit-content;
+}
+
+.alert-container .alert-box{
+    border: 1px solid rgba(0, 0, 0, 0.514);
+    width: fit-content;
+    height: fit-content;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.alert-container .danger{
+    background-color: red;
+    color: white;
+}
+.alert-container .warning{
+    background-color: yellow;
+}
+.alert-container .success{
+    background-color: green;
+    color: white;
+}
+
+.alert-container .in {
+    transition: 1s;
+    animation-name: movein;
+    animation-duration: 1s;
+}
+
+.alert-container .out {
+    transition: 1s;
+    animation-name: moveout;
+    animation-duration: 1s;
+}
+
+@keyframes movein {
+    0% {
+        transform: translateY(-1000%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes moveout {
+    0% {
+        transform: translateY(0%);
+    }
+    100% {
+        transform: translateY(-1000%);
+    }
+}

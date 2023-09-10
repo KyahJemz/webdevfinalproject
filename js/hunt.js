@@ -1,3 +1,4 @@
+import Alert from './modules/alert.js';
 import { Helper } from './modules/helper.js';
 import { Ajax } from './modules/ajax.js';
 import { 
@@ -40,8 +41,6 @@ function setHuntDisplay(){
 
     const filters = getFilteredCategory();
 
-
-
     if(filters.length <= 0){
         Items.forEach(item => {
             if(item._ItemName.toUpperCase().includes(Search)) {
@@ -57,20 +56,6 @@ function setHuntDisplay(){
             })
         });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     const container = HuntGridContainer.querySelector('.grid-container');
     container.innerHTML = '';
@@ -119,6 +104,7 @@ function AddToCart(event){
         AddItemToCart(new Cart(foundItem.ItemId, foundItem.ItemName, foundItem.ItemPrice, foundItem.ItemImage, foundItem.StoreId, foundItem.StoreName, foundItem.StoreImage, '1'))
         setCartDisplay();
         setHuntDisplay();
+        Alert.SendAlert("success", `${element.dataset.itemname} is added to your cart`, 3000);
     }
 }
 
@@ -214,6 +200,7 @@ function lessQuantityEvent(event){
     } else {
         setCartDisplay();
         setHuntDisplay();
+        Alert.SendAlert("success", `${element.dataset.itemname} is removed from your cart`, 3000);
     }
 }
 function addQuantityEvent(event){
@@ -257,9 +244,9 @@ function getItems(){
 getItems();
 
 function UploadOrder() {
-    Upload()
-    async function Upload(){       
+    Upload();
 
+    async function Upload() {
         const list = GetItemsFromCart();
         const unique = new Set();
         let StoresId = [];
@@ -270,7 +257,6 @@ function UploadOrder() {
         let TransactionBuyer = AccountId;
         
         let TransactionBuyerAddress = document.querySelector('.cart-footer .address').value;
-
 
         list.forEach(item => {
             TransactionAmount = (Number(TransactionAmount) + (Number(item._itemPrice) * Number(item._itemQuantity)));
@@ -302,17 +288,33 @@ function UploadOrder() {
         formData.append('TransactionSeller', TransactionSeller);
         formData.append('TransactionBuyerAddress', TransactionBuyerAddress);
         formData.append('Intent', 'Insert Transaction');
+
+        if (!TransactionBuyerAddress || list.length === 0) {
+            Alert.SendAlert("danger", "Please provide a valid address and add items to your order.", 3000);
+            throw new Error("Address or order is empty");
+        }
+
         try {
             const responseJSON = await Ajax.postFormData('../php/api/transaction.php', formData);
+            Alert.SendAlert("success", "Your order is posted, reloading page...", 3000);
             localStorage.clear();
-            window.location.reload();
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
             return responseJSON;
         } catch (error) {
+            Alert.SendAlert("danger", "Your order was rejected", 3000);
+            localStorage.clear();
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
             console.error('Error:', error);
             throw error;
+
         }
     }
 }
+
 helper.ElementsAddClickListener(document.querySelector('.order-now-button'),UploadOrder);
 
 document.querySelector('.hunt-search').addEventListener('input', () => {

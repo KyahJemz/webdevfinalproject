@@ -1,3 +1,4 @@
+import Alert from './modules/alert.js';
 import { Helper } from './modules/helper.js';
 import { Ajax } from './modules/ajax.js';
 import { 
