@@ -20,23 +20,6 @@ const CartListContainer = document.querySelector('.cart-list-container');
 const HuntGridContainer = document.querySelector('.hunt-grid-container');
 const CategoryListContainer = document.querySelector('.category-list-container');
 
-function getRandomFromArray(array, count) {
-    const shuffled = array.slice();
-    let i = array.length;
-    const results = [];
-    while (i--) {
-        const rand = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[rand]] = [shuffled[rand], shuffled[i]];
-    }
-    if (array.length <= count) {
-        return shuffled;
-    }
-    for (let j = 0; j < count; j++) {
-        results.push(shuffled[j]);
-    }
-    return results;
-}
-
 function getUniqueCategory() {
     const uniqueCategories = new Set();
     const newArray = [];

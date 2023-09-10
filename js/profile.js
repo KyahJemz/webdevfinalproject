@@ -3,6 +3,7 @@ import { Ajax } from './modules/ajax.js';
 import { 
     Item, 
     Cart,
+    Store,
     fetchAllItems,
     AddItemToCart,
     GetItemsFromCart,
@@ -13,10 +14,12 @@ import {
     fetchTransactions
 } from './class.js';
 
-refreshMyTransactions();
 refreshMyItems();
 refreshMyAccount();
 refreshMyStore();
+refreshAllItems();
+
+const uniqueCategories = new Set();
 
 function refreshMyItems(){
     (async () => {
@@ -97,11 +100,52 @@ function refreshMyTransactions(){
             console.error('Error:', error);
         }
     })();
-    
 }
 
+function refreshAllItems(){
+    (async () => {
+        try {
+            const fetch = await fetchAllItems(AccountId, AuthToken);
+            if (Array.isArray(fetch)) {
+                fetch.forEach(element => {
+                    Items.push(new Item(
+                        element['ItemId'],
+                        element['ItemName'],
+                        element['ItemCategory'],
+                        element['ItemPrice'],
+                        element['ItemImage'],
+                        element['StoreId'],
+                        element['StoreName'],
+                        element['StoreImage'],
+                        element['AccountId']
+                    ));
+                    if (element['StoreId']) {
+                        if (!uniqueCategories.has(element['StoreId'])) {
+                            uniqueCategories.add(element['StoreId']);
+                            Stores.push(new Store(
+                                element['StoreId'],
+                                element['StoreName'],
+                                element['StoreImage'],
+                                element['AccountId']
+                            ));
+                        }
+                    }
+                });
+                localStorage.setItem('Items', JSON.stringify(fetch));
+                console.log(Items);
+                console.log(Stores);
+                refreshMyTransactions();
+            } else {
+                console.log('fetchItems is not an array.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    })();
+}
 
 var Items = [];
+var Stores = [];
 var Carts = [];
 var Category = [];
 
@@ -518,13 +562,35 @@ function MyTransactions(list){
         </div>
     `;
     if (typeof data !== 'undefined' && data !== null && data !== '') {
+    
+
         document.getElementById('ProfileTransactionsContainer').innerHTML = ``;
         data.forEach(element => {
+
+
+            const Seller = JSON.parse(element.TransactionSeller);
+            let names = "";
+            Seller.forEach(item => {
+                Stores.forEach(store => {
+                   
+                    if (item.toString() === store._StoreId.toString()) {
+                        console.log ('ZZZZ',item,store._StoreId);
+                        if (names === ""){
+                            names = names + store._StoreName;
+                        } else {
+                            names = names + ", " +store._StoreName;
+                        }
+                    }
+                });
+            });
+
+
+
             document.getElementById('ProfileTransactionsContainer').innerHTML = document.getElementById('ProfileTransactionsContainer').innerHTML + `
                 <div class="list-item">
                     <span class="left">
-                        <div class="user">${element.TransactionSeller}</div>
-                        <div class="type">${element.TransactionStatus}</div>
+                        <div class="user">${names}</div>
+                        <div class="type complete">${element.TransactionStatus}</div>
                         <div class="date">${element.TransactionTimestamp}</div>
                     </span>
                     <span class="cost">${helper.formatPrice(element.TransactionAmount) }</span>

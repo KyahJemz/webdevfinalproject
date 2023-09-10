@@ -5,13 +5,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: gainsboro;
+    background-color: rgba(0, 0, 0, 0.397);
     background-image: url(../images/background.jpg);
-    background-blend-mode: multiply;
+    background-blend-mode: color-dodge;
     background-position: top ;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size:cover
+    background-size:cover;
 }
 
 h1 {

@@ -26,7 +26,7 @@ body {
 .myprofile,
 .transactions,
 .mystore{
-    background-color: white;
+
     height: 100%;
     padding: 20px;
     overflow: hidden;
@@ -36,6 +36,9 @@ body {
   box-shadow: 1px 1px 10px 1px rgba(128, 128, 128, 0.445);
   border-radius: 3px;
   position: relative;
+  background-color: rgba(235, 221, 203, 0.932);
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.575);
 }
 
 
@@ -77,10 +80,18 @@ body {
     padding-bottom: 6px;
     padding-left: 20px;
     padding-right: 20px;
-    background-color: white;
     cursor: pointer;
     border-radius: 10px;
     margin-bottom: 10px;
+}
+
+.transactions .list-item .user {
+    font-weight: 550;
+}
+
+.transactions .list-item .complete {
+    color: rgb(42, 167, 42);
+    font-weight: 550;
 }
 
 .mystore .create-store{
@@ -118,7 +129,7 @@ body {
 .myprofile .myprofile-header,
 .transactions .title,
 .mystore .mystore-header {
-    border-bottom: 1px solid gainsboro;
+    border-bottom: 1px solid rgb(0, 0, 0);
     padding-bottom: 10px;
 }
 
@@ -170,6 +181,7 @@ body {
     padding-left: 20px;
     padding-right: 20px;
     margin-bottom: 10px;
+    margin-right: 10px;
 }
 
 .mystore .list-item .top {
@@ -180,7 +192,7 @@ body {
 
 .transactions .list-item:hover,
 .mystore .list-item:hover{
-    background-color: rgba(222, 184, 135, 0.363);
+    background-color: rgba(255, 255, 255, 0.795);
 }
 
 .mystore .list-item .item-image {
@@ -214,7 +226,7 @@ body {
 .mystore .list-item .actions {
     position: absolute;
     bottom: 6px;
-    right: 7px;
+    right: 5px;
     display: flex;
     gap: 4px;
  }
