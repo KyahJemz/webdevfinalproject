@@ -80,8 +80,6 @@ body {
 }
 
 .suggested .suggested-row .card-item:hover{
-    transition: 0.5s;
-    background-color: rgba(222, 184, 135, 0.267);
     box-shadow: 0px 0px 10px 0.5px rgb(255, 255, 255);
 }
 
@@ -180,11 +178,15 @@ body {
     font-weight: 100;
 }
 
-
-.suggested .suggested-row .card-item .button button:hover{
-    transition: 0.5s;
-    transform: scale(1.03);
+.suggested .suggested-row .card-item .button Button:hover {
+    border-color: burlywood;
 }
+
+.suggested .suggested-row .card-item .button Button:active {
+    transform: scale(0.95);
+    box-shadow: 0px 0px 10px 1px rgba(109, 109, 109, 0.411);
+}
+
 
 .about {
     height: 100%;

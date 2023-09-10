@@ -3,7 +3,10 @@ import { Ajax } from './modules/ajax.js';
 import { 
     Item,
     Store,
+    Cart,
     fetchAllItems,
+    AddItemToCart,
+    GetItemsFromCart
 } from './class.js';
 
 var Items = [];
@@ -12,45 +15,49 @@ var Carts = [];
 
 const uniqueCategories = new Set();
 
-(async () => {
-    try {
-        const fetchItems = await fetchAllItems(AccountId, AuthToken, StoreId);
-        if (Array.isArray(fetchItems)) {
-            fetchItems.forEach(element => {
-                Items.push(new Item(
-                    element['ItemId'],
-                    element['ItemName'],
-                    element['ItemCategory'],
-                    element['ItemPrice'],
-                    element['ItemImage'],
-                    element['StoreId'],
-                    element['StoreName'],
-                    element['StoreImage'],
-                    element['AccountId']
-                ));
-                if (element['StoreId']) {
-                    if (!uniqueCategories.has(element['StoreId'])) {
-                        uniqueCategories.add(element['StoreId']);
-                        Stores.push(new Store(
-                            element['StoreId'],
-                            element['StoreName'],
-                            element['StoreImage'],
-                            element['AccountId']
-                        ));
+refreshItems();
+function refreshItems(){
+    (async () => {
+        try {
+            const fetchItems = await fetchAllItems(AccountId, AuthToken, StoreId);
+            if (Array.isArray(fetchItems)) {
+                fetchItems.forEach(element => {
+                    Items.push(new Item(
+                        element['ItemId'],
+                        element['ItemName'],
+                        element['ItemCategory'],
+                        element['ItemPrice'],
+                        element['ItemImage'],
+                        element['StoreId'],
+                        element['StoreName'],
+                        element['StoreImage'],
+                        element['AccountId']
+                    ));
+                    if (element['StoreId']) {
+                        if (!uniqueCategories.has(element['StoreId'])) {
+                            uniqueCategories.add(element['StoreId']);
+                            Stores.push(new Store(
+                                element['StoreId'],
+                                element['StoreName'],
+                                element['StoreImage'],
+                                element['AccountId']
+                            ));
+                        }
                     }
-                }
-            });
-            setSuggestedItems();
-            setSuggestedStores();
-            
-            console.log(Items);
-        } else {
-            console.log('fetchItems is not an array.');
+                });
+                setSuggestedItems();
+                setSuggestedStores();
+                
+                console.log(Items);
+            } else {
+                console.log('fetchItems is not an array.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-})();
+    })();
+}
+
 
 const helper = new Helper();
 
@@ -88,8 +95,18 @@ function getRandomFromArray(array, count) {
 function setSuggestedItems() {
     const randomItems = getRandomFromArray(Items, 20);
     addBanner(randomItems[0]);
+    Carts=GetItemsFromCart();
     randomItems.forEach(item => {
-        SuggestedItemsContainer.innerHTML += `
+
+        let exist = false;
+        Carts.forEach(cart => {
+            if (randomItems._ItemId === cart._itemId){
+                exist = true;
+            }
+        });
+    
+        if (!exist) {
+            SuggestedItemsContainer.innerHTML += `
             <div class="card-item" data-itemid="${item._ItemId}" data-itemname="${item._ItemName}" data-itemcategory="${item._ItemCategory}" data-itemprice="${item._ItemPrice}" data-itemimage="${item._ItemImage}" data-itemstorename="${item._StoreName}" data-itemstoreimage="${item._StoreImage}">
                 <div class="StoreName">${item._StoreName}</div>
                 <div class="ItemImage"><img src="../images/uploads/items/${item._ItemImage}" alt=""></div>
@@ -99,7 +116,23 @@ function setSuggestedItems() {
                 <div class="Button"><button>Add to cart</button></div>
             </div>
         `;
+        }
     });
+
+    helper.ElementsArrayAddClickListener(SuggestedItemsContainer.querySelectorAll('.Button button'),AddToCartClick);
+}
+
+function AddToCartClick(event){
+    const element = event.currentTarget.parentNode.parentNode;
+    const ItemId = element.dataset.itemid;
+    console.log(ItemId);
+    const foundItem = Items.find(item => item._ItemId === ItemId);
+    if (foundItem) {
+        AddItemToCart(new Cart(foundItem.ItemId, foundItem.ItemName, foundItem.ItemPrice, foundItem.ItemImage, foundItem.StoreId, foundItem.StoreName, foundItem.StoreImage, '1'))
+    }
+    console.log('Added');
+    console.log(GetItemsFromCart());
+    element.remove();
 }
 
 function setSuggestedStores() {
