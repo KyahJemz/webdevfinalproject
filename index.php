@@ -53,8 +53,6 @@
             return null;
         }
     }
-
-    echo ("<script>console.log('1')</script>");
     function validateSignUp (){
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             require './php/database-config.php';
@@ -182,3 +180,34 @@
     ?>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

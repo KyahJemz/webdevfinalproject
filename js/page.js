@@ -93,7 +93,7 @@ function getRandomFromArray(array, count) {
 }
   
 function setSuggestedItems() {
-    const randomItems = getRandomFromArray(Items, 20);
+    const randomItems = getRandomFromArray(Items, 10);
     addBanner(randomItems[0]);
     Carts=GetItemsFromCart();
     randomItems.forEach(item => {
@@ -136,7 +136,7 @@ function AddToCartClick(event){
 }
 
 function setSuggestedStores() {
-    const randomItems = getRandomFromArray(Stores, 20);
+    const randomItems = getRandomFromArray(Stores, 10);
     randomItems.forEach(item => {
         SuggestedStoresContainer.innerHTML += `
             <div class="card-item" data-storeid="${item._StoreId}" data-storename="${item._StoreName}" data-storeimage="${item._StoreImage}" data-storeaccountid="${item._AccountId}">
